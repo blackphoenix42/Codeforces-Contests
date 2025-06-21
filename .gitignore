@@ -20,4 +20,4 @@ Thumbs.db
 *.iml
 *.exe
 *.out
-.cph/
+#.cph/
