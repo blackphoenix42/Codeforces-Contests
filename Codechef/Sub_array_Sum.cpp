@@ -34,7 +34,7 @@ using vpll = vector<pll>;
 #define NO cout << "NO\n"
 
 // Debugging (disable before submission)
-// #define LOCAL
+#define LOCAL
 #ifdef LOCAL
 #define dbg(x)           \
     cerr << #x << " = "; \
@@ -95,9 +95,97 @@ ll mod_pow(ll a, ll b)
 }
 ll mod_inv(ll a) { return mod_pow(a, MOD - 2); }
 
+ll get_max(vi &arr, int &n)
+{
+    vi pre(n), suf(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        int j = i;
+
+        while (j > 0 && arr[j - 1] <= arr[i])
+        {
+            j = pre[j - 1];
+        }
+
+        pre[i] = j;
+    }
+
+    for (int i = n - 1; i >= 0; i--)
+    {
+        int j = i;
+
+        while (j < n - 1 && arr[j + 1] < arr[i])
+        {
+            j = suf[j + 1];
+        }
+
+        suf[i] = j;
+    }
+
+    ll res = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        ll sub = 1LL * (i - pre[i] + 1) * (suf[i] - i + 1);
+        res += 1LL * arr[i] * sub;
+    }
+
+    return res;
+}
+
+ll get_min(vi &arr, int &n)
+{
+    vi pre(n), suf(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        int j = i;
+
+        while (j > 0 && arr[j - 1] >= arr[i])
+        {
+            j = pre[j - 1];
+        }
+
+        pre[i] = j;
+    }
+    // dbg(pre);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        int j = i;
+
+        while (j < n - 1 && arr[j + 1] > arr[i])
+        {
+            j = suf[j + 1];
+        }
+
+        suf[i] = j;
+    }
+    //   dbg(suf);
+
+    ll res = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        ll sub = 1LL * (i - pre[i] + 1) * (suf[i] - i + 1);
+        res += 1LL * arr[i] * sub;
+    }
+
+    return res;
+}
+
 void solve()
 {
-    
+    int n;
+    cin >> n;
+    vi arr(n);
+
+    for (int &i : arr)
+        cin >> i;
+
+    ll a = get_max(arr, n);
+    ll b = get_min(arr, n);
+    cout << a - b << "\n";
 }
 
 int main()
