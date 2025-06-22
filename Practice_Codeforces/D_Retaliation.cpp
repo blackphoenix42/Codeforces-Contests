@@ -151,18 +151,6 @@ void _print(const vector<T> &v)
     cerr << "]";
 }
 template <typename T>
-void _print_with_index(const vector<T> &v)
-{
-    cerr << "[\n";
-    for (size_t i = 0; i < v.size(); ++i)
-    {
-        cerr << "  [" << i << "]: ";
-        _print(v[i]);
-        cerr << '\n';
-    }
-    cerr << "]";
-}
-template <typename T>
 void _print(const vector<vector<T>> &v)
 {
     cerr << "[\n";
@@ -171,6 +159,18 @@ void _print(const vector<vector<T>> &v)
         cerr << "  ";
         _print(row);
         cerr << "\n";
+    }
+    cerr << "]";
+}
+template <typename T>
+void _print_with_index(const vector<T> &v)
+{
+    cerr << "[\n";
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        cerr << "  [" << i << "]: ";
+        _print(v[i]);
+        cerr << '\n';
     }
     cerr << "]";
 }
@@ -471,6 +471,30 @@ namespace CPUtils
 
 void solve()
 {
+    int n;
+    cin >> n;
+    vl v(n);
+    READVEC(v);
+
+    int d = v[1] - v[0];
+    FOR(i, 1, n)
+    {
+        if (v[i] - v[i - 1] != d)
+        {
+            cout << "NO\n";
+            return;
+        }
+    }
+    int x;
+    if (d >= 0)
+        x = v[0] - d;
+    else
+        x = v[n - 1] + d;
+    if (x >= 0 && x % (n + 1) < 1)
+        YES;
+    else
+        NO;
+    return;
 }
 
 int main()
