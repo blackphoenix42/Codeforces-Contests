@@ -299,7 +299,6 @@ const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
 const ll INF = 1e18;
-const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
 #define in_bounds(x, y, n, m) (x >= 0 && x < n && y >= 0 && y < m)
@@ -448,16 +447,27 @@ namespace CPUtils
 
 void solve()
 {
+    int n;
+    cin >> n;
+    int x = 0, y = 0, z = 0;
+    FOR(i, 0, n)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        x += a;
+        y += b;
+        z += c;
+    }
+
+    if (!x && !y && !z)
+        YES;
+    else
+        NO;
 }
 
 int main()
 {
     fastio();
-    int t = 1;
-    cin >> t;
-    while (t--)
-    {
-        solve();
-    }
+    solve();
     return 0;
 }
