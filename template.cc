@@ -82,11 +82,14 @@ using vpll = vector<pll>;
 #define parity(x) (__builtin_parityll(x))
 #define clz(x) __builtin_clzll(x)
 #define ctz(x) __builtin_ctzll(x)
+#define ffs(x) __builtin_ffsll(x)
+
 #define READ_VEC(vec, n) \
     vi vec(n);           \
     for (auto &x : vec)  \
         cin >> x;
 #define READ_ARR(arr, n)        \
+    int arr[n];                 \
     for (int i = 0; i < n; ++i) \
         cin >> arr[i];
 #define read_pair(a, b) cin >> a >> b
