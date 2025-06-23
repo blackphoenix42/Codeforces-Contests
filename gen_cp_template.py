@@ -28,9 +28,6 @@ class CPHHandler(FileSystemEventHandler):
             except Exception as e:
                 print(f"❌ Error writing to {event.src_path}: {e}")
 
-
-
-
 if __name__ == "__main__":
     observer = Observer()
     observer.schedule(CPHHandler(), WATCH_FOLDER, recursive=False)
