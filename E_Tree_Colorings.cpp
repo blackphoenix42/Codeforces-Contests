@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    author:  blackphoenix42
- *    created:
+ *    created: 2025-06-23 20:14:26
  *    profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -12,7 +12,7 @@ using namespace std;
 #define fastio()                 \
     ios::sync_with_stdio(false); \
     cin.tie(nullptr);            \
-    cout.tie(nullptr);
+    cout.tie(nullptr)
 
 // Type aliases
 using ll = long long;
@@ -50,14 +50,14 @@ using vpll = vector<pll>;
 #define se second
 #define YES cout << "YES\n"
 #define NO cout << "NO\n"
-#define FOR(a, b, c) for (int a = b; a < c; ++a)
-#define FOR1(a, c) for (; a < c; ++a)
-#define FORN(a, b, c) for (int a = b; a <= c; ++a)
-#define FORD(a, b, c) for (int a = b; a >= c; --a)
-#define FORSQ(a, b, c) for (int a = b a * a <= c; ++a)
-#define FORC(a, b, c) for (char a = b; a <= c; ++a)
-#define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
-#define EACH(a, b) for (auto &a : b)
+#define FOR(a, b, c) for (int a = (b); (a) < (c); ++(a))
+#define FOR1(a, c) for (; (a) < (c); ++(a))
+#define FORN(a, b, c) for (int a = (b); (a) <= (c); ++(a))
+#define FORD(a, b, c) for (int a = (b); (a) >= (c); --(a))
+#define FORSQ(a, b, c) for (int(a) = (b); (a) * (a) <= (c); ++(a))
+#define FORC(a, b, c) for (char(a) = (b); (a) <= (c); ++(a))
+#define FOR_MULT(m, d, max_val) for (int m = (d); (m) <= (max_val); (m) += (d))
+#define EACH(a, b) for (auto &a : (b))
 #define REP(i, n) FOR(i, 0, n)
 #define REPN(i, n) FORN(i, 1, n)
 #define MAX(a, b) a = max(a, b)
@@ -323,7 +323,7 @@ const int MOD = 998244353;
 const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
-const ll INF = 1e18;
+const ll INF = 1e9;
 const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
@@ -471,18 +471,69 @@ namespace CPUtils
     };
 }
 
+void precompute_divs(int max_val, vvi &div_map)
+{
+    FOR(d, 3, max_val + 1)
+    {
+        FOR_MULT(m, d, max_val)
+        {
+            div_map[m].pb(d);
+        }
+    }
+}
+
+void compute_min_ops(int max_q, const vvi &div_map, vi &dp)
+{
+    int lim = max_q + 2;
+    vi arr(lim + 1, INF);
+    dp[1] = 0;
+    if (max_q >= 2)
+        dp[2] = INF;
+
+    FORN(mass, 3, lim)
+    {
+        arr[mass] = 1 + dp[mass - 2];
+        if (mass <= max_q)
+        {
+            dp[mass] = arr[mass];
+            EACH(divisor, div_map[mass])
+            {
+                int reduced = mass / divisor;
+                if (dp[reduced] < INF)
+                    dp[mass] = min(dp[mass], dp[reduced] + arr[divisor]);
+            }
+        }
+    }
+}
+
 void solve()
 {
+    int t;
+    cin >> t;
+    vi inputs(t);
+    READVEC(inputs);
+
+    int max_input = *max_element(all(inputs));
+    vvi divisor_map(max_input + 1);
+    precompute_divs(max_input, divisor_map);
+
+    vi dp(max_input + 3, INF);
+    compute_min_ops(max_input, divisor_map, dp);
+
+    EACH(query, inputs)
+    {
+        if (query == 1)
+            print(1);
+        else if (dp[query] >= INF)
+            print(-1);
+        else
+            print(1 + dp[query]);
+    }
 }
 
 int main()
 {
     fastio();
-    int t = 1;
-    cin >> t;
-    while (t--)
-    {
-        solve();
-    }
+    solve();
     return 0;
 }

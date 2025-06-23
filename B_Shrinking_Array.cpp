@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    author:  blackphoenix42
- *    created:
+ *    created: 2025-06-23 20:14:17
  *    profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -12,7 +12,7 @@ using namespace std;
 #define fastio()                 \
     ios::sync_with_stdio(false); \
     cin.tie(nullptr);            \
-    cout.tie(nullptr);
+    cout.tie(nullptr)
 
 // Type aliases
 using ll = long long;
@@ -50,14 +50,13 @@ using vpll = vector<pll>;
 #define se second
 #define YES cout << "YES\n"
 #define NO cout << "NO\n"
-#define FOR(a, b, c) for (int a = b; a < c; ++a)
-#define FOR1(a, c) for (; a < c; ++a)
-#define FORN(a, b, c) for (int a = b; a <= c; ++a)
-#define FORD(a, b, c) for (int a = b; a >= c; --a)
-#define FORSQ(a, b, c) for (int a = b a * a <= c; ++a)
-#define FORC(a, b, c) for (char a = b; a <= c; ++a)
-#define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
-#define EACH(a, b) for (auto &a : b)
+#define FOR(a, b, c) for (int a = (b); (a) < (c); ++(a))
+#define FOR1(a, c) for (; (a) < (c); ++(a))
+#define FORN(a, b, c) for (int(a) = (b); (a) <= (c); ++(a))
+#define FORD(a, b, c) for (int a = (b); (a) >= (c); --(a))
+#define FORSQ(a, b, c) for (int(a) = (b); (a) * (a) <= (c); ++(a))
+#define FORC(a, b, c) for (char(a) = (b); (a) <= (c); ++(a))
+#define EACH(a, b) for (auto &(a) : (b))
 #define REP(i, n) FOR(i, 0, n)
 #define REPN(i, n) FORN(i, 1, n)
 #define MAX(a, b) a = max(a, b)
@@ -323,7 +322,7 @@ const int MOD = 998244353;
 const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
-const ll INF = 1e18;
+const ll INF = 1e9;
 const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
@@ -473,12 +472,79 @@ namespace CPUtils
 
 void solve()
 {
+    int len;
+    cin >> len;
+    vi a(len);
+    READVEC(a);
+
+    if (len < 2)
+    {
+        print(-1);
+        return;
+    }
+
+    bool nice = false;
+    FOR(i, 0, len - 1)
+    {
+        if (abs(a[i] - a[i + 1]) <= 1)
+        {
+            nice = true;
+            break;
+        }
+    }
+
+    if (nice)
+    {
+        print(0);
+        return;
+    }
+
+    int ans = INF;
+    FOR(mid, 0, len - 1)
+    {
+        vi minR(len, INF), maxR(len, -INF);
+        if (mid + 1 < len)
+        {
+            minR[mid + 1] = a[mid + 1];
+            maxR[mid + 1] = a[mid + 1];
+            FOR(i, mid + 2, len)
+            {
+                minR[i] = min(minR[i - 1], a[i]);
+                maxR[i] = max(maxR[i - 1], a[i]);
+            }
+        }
+
+        int lmin = a[mid], lmax = a[mid];
+        int p1 = len - 1, p2 = len - 1;
+
+        FORD(i, mid, 0)
+        {
+            lmin = min(lmin, a[i]);
+            lmax = max(lmax, a[i]);
+
+            while (p1 > mid + 1 && maxR[p1 - 1] >= lmin - 1)
+                --p1;
+            while (p2 > mid + 1 && minR[p2 - 1] <= lmax + 1)
+                --p2;
+
+            int c1 = (p1 >= mid + 1 && maxR[p1] >= lmin - 1) ? p1 : len;
+            int c2 = (p2 >= mid + 1 && minR[p2] <= lmax + 1) ? p2 : len;
+            int right = max(c1, c2);
+
+            if (right < len)
+            {
+                ans = min(ans, (mid - i) + (right - (mid + 1)));
+            }
+        }
+    }
+
+    print(ans == INF ? -1 : ans);
 }
 
 int main()
 {
     fastio();
-    int t = 1;
+    int t;
     cin >> t;
     while (t--)
     {

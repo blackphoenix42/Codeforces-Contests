@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    author:  blackphoenix42
- *    created:
+ *    created: 2025-06-23 20:07:56
  *    profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -12,7 +12,7 @@ using namespace std;
 #define fastio()                 \
     ios::sync_with_stdio(false); \
     cin.tie(nullptr);            \
-    cout.tie(nullptr);
+    cout.tie(nullptr)
 
 // Type aliases
 using ll = long long;
@@ -50,14 +50,13 @@ using vpll = vector<pll>;
 #define se second
 #define YES cout << "YES\n"
 #define NO cout << "NO\n"
-#define FOR(a, b, c) for (int a = b; a < c; ++a)
-#define FOR1(a, c) for (; a < c; ++a)
+#define FOR(a, b, c) for (int(a) = (b); (a) < (c); ++(a))
+#define FOR1(a, c) for (; (a) < (c); ++(a))
 #define FORN(a, b, c) for (int a = b; a <= c; ++a)
-#define FORD(a, b, c) for (int a = b; a >= c; --a)
-#define FORSQ(a, b, c) for (int a = b a * a <= c; ++a)
-#define FORC(a, b, c) for (char a = b; a <= c; ++a)
-#define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
-#define EACH(a, b) for (auto &a : b)
+#define FORD(a, b, c) for (int(a) = (b); (a) >= (c); --(a))
+#define FORSQ(a, b, c) for (int(a) = (b); (a) * (a) <= (c); ++(a))
+#define FORC(a, b, c) for (char(a) = (b); (a) <= (c); ++(a))
+#define EACH(a, b) for (auto &(a) : (b))
 #define REP(i, n) FOR(i, 0, n)
 #define REPN(i, n) FORN(i, 1, n)
 #define MAX(a, b) a = max(a, b)
@@ -121,7 +120,6 @@ inline void OPEN(string s)
 #endif
 
 // Debug print helpers for primitive and STL types
-// Primitive types
 void _print(int x) { cerr << x; }
 void _print(bool x) { cerr << (x ? "true" : "false"); }
 void _print(ll x) { cerr << x; }
@@ -130,17 +128,8 @@ void _print(string x) { cerr << x; }
 void _print(const double &x) { cerr << x; }
 void _print(ld x) { cerr << x; }
 void _print(ull x) { cerr << x; }
-
-// STL Containers
 template <typename T, typename V>
-void _print(const pair<T, V> &p)
-{
-    cerr << "{";
-    _print(p.fi);
-    cerr << ", ";
-    _print(p.se);
-    cerr << "}";
-}
+void _print(const pair<T, V> &p) { cerr << "{" << p.fi << ", " << p.se << "}"; }
 template <typename T>
 void _print(const vector<T> &v)
 {
@@ -283,7 +272,6 @@ void _print(stack<T> s)
     reverse(temp.begin(), temp.end());
     _print(temp);
 }
-// Other types
 template <typename T1, typename T2, typename T3>
 void _print(const tuple<T1, T2, T3> &t)
 {
@@ -296,13 +284,8 @@ void _print(const tuple<T1, T2, T3> &t)
     cerr << ")";
 }
 template <size_t N>
-void _print(const bitset<N> &b)
-{
-    cerr << b.to_string();
-}
-
+void _print(const bitset<N> &b) { cerr << b.to_string(); }
 void debug_out() { cerr << endl; }
-
 template <typename Head, typename... Tail>
 void debug_out(Head H, Tail... T)
 {
@@ -319,7 +302,6 @@ const int MOD = 1e9 + 7;
 #else
 const int MOD = 998244353;
 #endif
-// const int N = 2e5 + 5;
 const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
@@ -329,7 +311,7 @@ const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
 #define in_bounds(x, y, n, m) (x >= 0 && x < n && y >= 0 && y < m)
 
-// Modular arithmetic utils (optional)
+// Modular arithmetic utils
 ll mod_add(ll a, ll b) { return (a + b) % MOD; }
 ll mod_sub(ll a, ll b) { return ((a - b) % MOD + MOD) % MOD; }
 ll mod_mul(ll a, ll b) { return (a * b) % MOD; }
@@ -347,132 +329,30 @@ ll mod_pow(ll a, ll b)
     return res;
 }
 ll mod_inv(ll a) { return mod_pow(a, MOD - 2); }
-namespace CPUtils
-{
-    struct SegmentTree
-    {
-        int n;
-        vector<ll> tree;
-
-        SegmentTree(int _n) : n(_n), tree(4 * _n, 0) {}
-
-        void build(const vector<ll> &a, int v = 1, int tl = 0, int tr = -1)
-        {
-            if (tr == -1)
-                tr = n - 1;
-            if (tl == tr)
-            {
-                tree[v] = a[tl];
-            }
-            else
-            {
-                int tm = (tl + tr) / 2;
-                build(a, v * 2, tl, tm);
-                build(a, v * 2 + 1, tm + 1, tr);
-                tree[v] = tree[v * 2] + tree[v * 2 + 1];
-            }
-        }
-
-        void update(int pos, ll val, int v = 1, int tl = 0, int tr = -1)
-        {
-            if (tr == -1)
-                tr = n - 1;
-            if (tl == tr)
-            {
-                tree[v] = val;
-            }
-            else
-            {
-                int tm = (tl + tr) / 2;
-                if (pos <= tm)
-                    update(pos, val, v * 2, tl, tm);
-                else
-                    update(pos, val, v * 2 + 1, tm + 1, tr);
-                tree[v] = tree[v * 2] + tree[v * 2 + 1];
-            }
-        }
-
-        ll query(int l, int r, int v = 1, int tl = 0, int tr = -1)
-        {
-            if (tr == -1)
-                tr = n - 1;
-            if (l > r)
-                return 0;
-            if (l == tl && r == tr)
-                return tree[v];
-            int tm = (tl + tr) / 2;
-            return query(l, min(r, tm), v * 2, tl, tm) +
-                   query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
-        }
-
-        ~SegmentTree() = default;
-    };
-    struct FenwickTree
-    {
-        int n;
-        vector<ll> bit;
-
-        FenwickTree(int _n) : n(_n + 1), bit(n, 0) {}
-
-        void add(int index, ll delta)
-        {
-            for (; index < n; index += index & -index)
-                bit[index] += delta;
-        }
-
-        ll sum(int index) const
-        {
-            ll res = 0;
-            for (; index > 0; index -= index & -index)
-                res += bit[index];
-            return res;
-        }
-
-        ll range_sum(int l, int r) const
-        {
-            return sum(r) - sum(l - 1);
-        }
-
-        void clear() { fill(bit.begin(), bit.end(), 0); }
-
-        ~FenwickTree() = default;
-    };
-    struct DSU
-    {
-        vector<int> parent, rank;
-
-        DSU(int n) : parent(n), rank(n, 0)
-        {
-            iota(parent.begin(), parent.end(), 0); // self-parented
-        }
-
-        int find(int x)
-        {
-            if (x != parent[x])
-                parent[x] = find(parent[x]); // path compression
-            return parent[x];
-        }
-
-        bool unite(int x, int y)
-        {
-            x = find(x);
-            y = find(y);
-            if (x == y)
-                return false;
-            if (rank[x] < rank[y])
-                swap(x, y);
-            parent[y] = x;
-            if (rank[x] == rank[y])
-                rank[x]++;
-            return true;
-        }
-
-        ~DSU() = default;
-    };
-}
 
 void solve()
 {
+    int alice, prize1, prize2;
+    cin >> alice >> prize1 >> prize2;
+
+    int d1 = abs(alice - prize1);
+    int d2 = abs(alice - prize2);
+
+    bool possible = false;
+    FORN(candidate, 1, 100)
+    {
+        if (candidate == alice)
+            continue;
+        int c1 = abs(candidate - prize1);
+        int c2 = abs(candidate - prize2);
+        if (c1 < d1 && c2 < d2)
+        {
+            possible = true;
+            break;
+        }
+    }
+
+    possible ? YES : NO;
 }
 
 int main()

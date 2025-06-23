@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    author:  blackphoenix42
- *    created:
+ *    created: 2025-06-23 20:14:23
  *    profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -12,7 +12,7 @@ using namespace std;
 #define fastio()                 \
     ios::sync_with_stdio(false); \
     cin.tie(nullptr);            \
-    cout.tie(nullptr);
+    cout.tie(nullptr)
 
 // Type aliases
 using ll = long long;
@@ -50,14 +50,13 @@ using vpll = vector<pll>;
 #define se second
 #define YES cout << "YES\n"
 #define NO cout << "NO\n"
-#define FOR(a, b, c) for (int a = b; a < c; ++a)
-#define FOR1(a, c) for (; a < c; ++a)
-#define FORN(a, b, c) for (int a = b; a <= c; ++a)
-#define FORD(a, b, c) for (int a = b; a >= c; --a)
-#define FORSQ(a, b, c) for (int a = b a * a <= c; ++a)
-#define FORC(a, b, c) for (char a = b; a <= c; ++a)
-#define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
-#define EACH(a, b) for (auto &a : b)
+#define FOR(a, b, c) for (int a = (b); (a) < (c); ++(a))
+#define FOR1(a, c) for (; (a) < (c); ++(a))
+#define FORN(a, b, c) for (int(a) = (b); (a) <= (c); ++(a))
+#define FORD(a, b, c) for (int(a) = (b); (a) >= (c); --(a))
+#define FORSQ(a, b, c) for (int(a) = (b); (a) * (a) <= (c); ++(a))
+#define FORC(a, b, c) for (char(a) = (b); (a) <= (c); ++(a))
+#define EACH(a, b) for (auto &a : (b))
 #define REP(i, n) FOR(i, 0, n)
 #define REPN(i, n) FORN(i, 1, n)
 #define MAX(a, b) a = max(a, b)
@@ -471,8 +470,79 @@ namespace CPUtils
     };
 }
 
+int center(const vector<vector<pii>> &graph)
+{
+    FOR(i, 1, sz(graph))
+    {
+        if (sz(graph[i]) == 2)
+            return i;
+    }
+    return -1;
+}
+
+vector<pii> orient(int center, int left, int right, const vector<vector<pii>> &graph, int eid1, int eid2)
+{
+    vector<bool> edge_used(sz(graph) - 1, false);
+    edge_used[eid1] = edge_used[eid2] = true;
+    vector<pii> sequence;
+    sequence.pb({left, center});
+    sequence.pb({center, right});
+
+    stack<tuple<int, int, bool>> todo;
+    todo.push(make_tuple(left, center, true));
+    todo.push(make_tuple(right, center, false));
+
+    while (!todo.empty())
+    {
+        auto [curr, prev, dir] = todo.top();
+        todo.pop();
+        for (auto &[nxt, edge_id] : graph[curr])
+        {
+            if (edge_used[edge_id])
+                continue;
+            edge_used[edge_id] = true;
+            if (dir)
+            {
+                sequence.pb({curr, nxt});
+                todo.push(make_tuple(nxt, curr, false));
+            }
+            else
+            {
+                sequence.pb({nxt, curr});
+                todo.push(make_tuple(nxt, curr, true));
+            }
+        }
+    }
+    return sequence;
+}
+
 void solve()
 {
+    int nodes;
+    cin >> nodes;
+    vector<vector<pii>> graph(nodes + 1);
+    FOR(i, 0, nodes - 1)
+    {
+        int a, b;
+        cin >> a >> b;
+        graph[a].pb({b, i});
+        graph[b].pb({a, i});
+    }
+
+    int mid = center(graph);
+    if (mid == -1)
+    {
+        NO;
+        return;
+    }
+
+    auto [left_node, edge1] = graph[mid][0];
+    auto [right_node, edge2] = graph[mid][1];
+
+    auto answer = orient(mid, left_node, right_node, graph, edge1, edge2);
+    YES;
+    EACH(link, answer)
+    write_pair(link);
 }
 
 int main()
