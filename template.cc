@@ -54,7 +54,7 @@ using vpll = vector<pll>;
 #define FOR1(a, c) for (; a < c; ++a)
 #define FORN(a, b, c) for (int a = b; a <= c; ++a)
 #define FORD(a, b, c) for (int a = b; a >= c; --a)
-#define FORSQ(a, b, c) for (int a = b a * a <= c; ++a)
+#define FORSQ(a, b, c) for (int a = b; a * a <= c; ++a)
 #define FORC(a, b, c) for (char a = b; a <= c; ++a)
 #define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
 #define EACH(a, b) for (auto &a : b)
@@ -324,6 +324,7 @@ const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
 const ll INF = 1e18;
+const ll INF_INT = 1e9;
 const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
