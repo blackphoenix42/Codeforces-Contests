@@ -1,0 +1,8 @@
+Types of unary operators:
+    unary minus(-)
+    increment(++)
+    decrement(- -)
+    NOT(!)
+    Addressof operator(&)
+    sizeof()
+

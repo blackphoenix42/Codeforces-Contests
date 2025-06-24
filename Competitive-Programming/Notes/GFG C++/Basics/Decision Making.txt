@@ -1,0 +1,28 @@
+if(){
+
+}
+else if(){
+
+}else{
+
+}
+
+
+switch(){
+    case 1: break;
+    .
+    .
+    .
+    default:break;
+}
+
+
+Jump Statements:
+    1. break
+    2. continue
+    3. return
+    4. goto
+        Syntax:
+        label:
+            // Statements
+        goto label;

@@ -1,0 +1,24 @@
+In C++, pre-increment (or pre-decrement) can be used as l-value, but post-increment (or post-decrement) can not be used as l-value.
+
+L-Value:
+    “l-value” refers to memory location which identifies an object.
+
+Example:
+    int main() 
+    { 
+        int a = 10; 
+    
+        ++a = 20; // works but a++ = 20 will give error
+    
+        printf("a = %d", a); 
+        getchar(); 
+        return 0; 
+    } 
+    Output:
+    a = 20
+
+It is because ++a returns an lvalue, which is basically a reference to the variable to which we can further assign — just like an ordinary variable. 
+It could also be assigned to a reference as follows:
+    int &ref = ++a; // valid
+    int &ref = a++; // invalid
+

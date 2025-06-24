@@ -1,0 +1,797 @@
+Points:
+    Terms:
+        double val{123.5};
+        here, val = variable; & 123.5 = Literal
+    In mix of ANDs(&&) , ORs(||) in an expression group & solve all ANDs first.
+    In solving ANDs , ORs C++ uses short circuit evaluation i.e. if first part is false in AND then don't evaluate second one. Similarly, if first part is True in OR don't evaluate next one
+    Split Strings in Multiline:
+        string b {"MAKES "
+			"perfect"};
+    Whenever printing bool value use brackets- "cout << (a<b)" not "cout<< a < b"
+
+    cout << boolalpha:
+        it will print true as true rather than 1
+    
+
+Initialise variables in 4 ways:
+    int age1;           // uninitialized: Garbage Don't
+    int age2 = 50;      // C-style, popular
+    int age3 (52);      // Constructor Initialisation
+    int age4 {52};      // Modern Initalisation: Preferred // List Initialisation
+
+    int i1 = int();      // inits with 0
+    int i2 {};           // inits with 0
+    int i3 = {52}        // inits with 52
+    auto i5 = 42         // inits int with 42
+
+
+Boolean:
+    bool b1 = -10, b2 = 0, b3 = 10;
+    cout << b1 << b2 << b3; // 1 0 1
+    // This is because it converts all true-false values in 0s and 1s.
+    // Only false at 0.
+
+Char: 
+    ASCII:
+        char val = 20;
+        // Yes val will be equal to ASCII value of 20
+    Intialise:
+        char ch = 'a'; // Use Single Quotes for char and double for string
+    Overflow:
+        char ch = 127 + 1;
+        // Compiles but Overflow as its range is from -128 to 127 
+
+Constant Variables:
+    Naming Conventions: CAPITAL LETTERS
+    INT_MAX: C++ const for the maximum value for the integer data type. It exists in #include <climits>
+    example:cout << INT_MAX << INT_MIN;
+            const double PI = 3.14;
+
+Prefix & Postfix Operators:
+    Ex1:
+        a = 10;
+        b = ++a;
+        // a = 11 , b = 11
+    Ex2:
+        a = 10
+        cout << a++ + ++a; // 22 & a = 12
+        // This is undefined behaviour we don't know which will be evaluated first b/w a++ or ++a
+    Ex3:
+        a = 10
+        cout<<(a++); //10
+
+Comma Operator:
+    The comma operator evaluates from left to right, return the last after-comma result. This is a bad coding style. Avoid changing the variable in an expression unless there is a reason and you really know it is defined behaviour.
+    Ex:
+    int a = 0;
+    cout << (a++, ++a, a++, ++a, a++) << "\n";
+    // 4
+
+Operator Precedence:
+    ++ -- (Postfix)
+    ++ -- -(unary) (Prefix)            : Evaluated RTL         
+    * / %
+    + -
+    < <= > >=
+    == !=
+    &&
+    ||
+    = += -= /= %=                       : Evaluated RTL 
+
+Comparison: 
+    Strings:
+        Upper Letter comes before lower Letter
+        ex: name1= ayu, name2 = Ayu 
+        cout<< name1 > name2;   // 1 (true) 
+        // letter by letter comparison and decision based on which letter is smaller
+    Double:
+        Don't compare them directly, as C++ has approx representation for 'real' values
+        ex: a = 4.8212, b = 4.8212
+        cout<< a==b; // sometimes prints 0
+
+
+Selection:
+    if(age){
+        cout<<"Your age is:"<<age;
+    } // Passes for all non-zeros values
+
+    if statement with initializer:
+        if(int y = 10; y % 2 == 1){
+            cout<<"asdsad";
+        }
+        else if(y%2==0){
+            cout<<"asdsad";
+        }
+        // y won't be visible after if else block
+
+
+Arrays:
+    1D Array:
+        const int size = 5;
+        int numbers[size] = {1,2,3,4,5} // Can't change size later
+        Initialise:
+            int arr1[100] = {5}; 
+            int arr2[100]{5}; 
+            int arr3[]{5};  // auto size
+
+        Sort:
+            sort(arr, arr + 5)
+        
+    Char Array:
+        string name = "hanny"
+        int size = name.size() // use to get array length
+
+        char name1[5] = {'h','e','l','o'} // 5 not 4  Last index for null character '\0'
+        char name2[5] = "helo"
+        string name3 = "helo" 
+
+        If compiler encounters '\0' it stops printing.
+        Ex:
+            char name4[5]={'h','\0','l','o','\0'}
+            cout<<name4; // h
+        
+        Input a String with spaces:
+            string name1;
+            getline(cin,name1)
+            cout<<name1;
+
+            char name2[50];
+            cin.getline(name2,50)
+            cout<<name2;
+
+        Array of Strings:
+            string name[3] = {"hello","world !"}
+
+    Multi D Array:  
+        2D Array:
+            int val[3][4] = {
+                {1,2,3,4},{4,5,6,7},{7,8,9,0}
+            }
+            
+            double name[7][6] = {0};            // Initalise every index to 0
+
+        Flatten Array:
+            Change 2d to 1d
+        Matrix
+   
+
+        
+
+Functions:
+    Example:
+        int yolo(int a,int b = 6){      // Can eve pass function as arg ex: (Function square)
+            return a + b;
+        }
+        int main(){
+            int res = yolo(5,6);
+        }
+    
+    Func Overloading:
+        Same name but different params (type or their count) return is not considered
+        Ex:
+            int add(int a, int b){}
+            double add (double a , double b){}
+            int add (int a, int b, int c)
+    
+    Pass By Reference:
+        Above ones were pass by value
+            void add(int a, int &b){a++;b++;}
+        Arrays are always passed by Reference
+        Try to pass strings as reference as it takes a lot of time
+
+    Built In Func:
+        Ex:
+            #include <cmath>
+            abs(),fabs(),ceil(),sqrt(),round(), etc.
+
+            Also: isalpha(),isdigit(),isupper(),(char)tolower('X') ,(char)toupper('X') 
+
+            max(), pow(),log2(),log10()
+
+            (double) rand()/RAND_MAX
+
+
+Global, Local, Static Variables:  
+
+        int global_val {9};
+        int g2; // =0
+        int g3 {}; // =0
+        int main()
+    
+    Static Variables:
+        They are allocated only once so if a func has a static varibale and u call that func again and again it will always use its last value.
+
+        static int so{0};
+
+    Global and static variables are initialized to their default values:
+        which is zero
+        nullptr for pointers
+    
+    A global var is visible from its point of declaration to end of file
+        Don't access before that
+
+    In practice using static local variables or global variables are NOT WELCOMED
+
+    Recusrive Func:
+        Func calling itself over and over till it meets the base case
+
+        Ex:
+            int fact(int n){
+                if (n==1) return 1;
+                return fact(n-1) * n;
+            }
+
+
+Structures:
+    Ex:
+        struct employee{
+            string name;
+            int age;
+            employee(){ // Constructor
+                name = "";      // can also do like first = last = "";
+                age = 0;
+            }
+            employee(string _name,int _age=0){
+                name = _name;
+                age = _age;
+            }
+            void read_emp(){
+                cout<< name << age;
+            }
+        };
+
+        int main(){
+            employee first = {"ayu",10}
+            employee emp[5];    // Array of employees
+            cout<< first.name;
+            cout<< first.read_emp();
+            sort(emp, emp + 5, func_that_will_return_bool_value_compare_on_basis_of_name_or_age)
+        }
+    Struct inside Struct:
+        struct full_name{
+            string first,last;
+        }
+        struct employee{
+            full_name emp1;
+            void read(){
+                emp1.first;
+            }
+        }
+
+
+Uniform Initalisation:
+    int a {5};
+    Always try to initialize variables
+
+
+Function Template:
+    To avoid function overload
+    Example 1:
+        template <typename Type>                 // can sometimes use class instead of typename
+        Type myMax(Type a, Type b){
+            if(a>b) return a;
+            return b;
+        }
+        int main(){
+            myMax(2,5)                          // Guessed as int
+            myMax<int,int>(2,5)                 // 5
+            myMax<double>(2.5,5.5)              // 5.5
+            myMax('A','X')                      // X
+            myMax(2,5.5)                        // Error: as it can't guess
+        } 
+    Example 2:
+        template<class Type1,class Type2>       // can use class or typename no diff
+        Type1 sum (Type1 a, Type2 b)[
+            Type1 r = a + b;
+            return r;
+        }
+
+        int main(){
+            sum(1,10)                   // 11
+            sum<int, int>(1.2,10)       // 11
+            sum(1,'A')                  // 66
+        }
+
+    Handle Specific Data Type:
+        template<class T>
+        T add(T a, T b){
+            return a+ b;
+        }
+        Instead of this:
+            template<class T>
+            T multiply(T a, int factor){
+                return a * factor;
+            }
+        
+        Use this:
+            template<>
+            string multiply(string str, int faactor){
+                string res = "";
+                while(factor--) res+=str;
+                return res;
+            }
+
+    
+
+CLass Template:
+    Can use it in struct and classes
+    template <typename T> 
+    class Array { 
+    private: 
+        T *ptr; 
+        int size; 
+    public: 
+        Array(T arr[], int s); 
+        void print(); 
+    }; 
+    
+    template <typename T> 
+    Array<T>::Array(T arr[], int s) { 
+        ptr = new T[s]; 
+        size = s; 
+        for(int i = 0; i < size; i++) 
+            ptr[i] = arr[i]; 
+    } 
+    
+    template <typename T> 
+    void Array<T>::print() { 
+        for (int i = 0; i < size; i++) 
+            cout<<" "<<*(ptr + i); 
+        cout<<endl; 
+    } 
+
+
+Variadic Template:
+    Variadic Parameter accepts zero or more values. Most probab its the rightmost parameter.
+
+    Variadic Functions are those which take a variable number of arguments
+
+    Variadic Template: a modern and safe way to solve a problem
+
+    Example:
+        template<typename ... SomeArgs>
+        void Hello(SomeArgs ... args){
+            int sz = sizeof ...(args);
+            cout<<sz<<" "<<__PRETTY_FUNCTION__<<"\n";       // prints name of func and its arg types
+        }
+        int main(){
+            Hello(1,2,3,4);                 // [with SomeArgs = {int, int, int, int}]
+            Hello("Ayu",5,2.5);             // [with SomeArgs = {const char*, int, double}]
+            Hello('c');                     // [with SomeArgs = {char}]
+            Hello();                        // [with SomeArgs = {}]
+        }
+
+
+Fold Expression:
+    only in c++ 17 or higher
+    Make variable template easier
+    Types:
+        Unary Right Fold
+        Unary Left Fold
+        Binary Right Fold
+        Binary Left Fold
+        
+    Unary Right Fold:
+        template<typename ...Args>
+        auto sun_unary_right_fold(Args ...args){
+            return (args + ...) ;    // Eventually it will be like (1 + (2 + (3 + 4))) // Another way of using ...
+        }
+        int main(){
+            int res = sun_unary_right_fold(1,2,3,4);    // Can't be 0 parameters
+        }
+
+    Binary Right Fold:
+        return (args + ... + 0)     //(1 + (2 + (3 + (4 + 0))))     //Should have same operator in between 
+        // Now can even give 0 parameters
+
+    Unary Left Fold:
+        return (... + args )
+
+    Binary Left Fold:
+        return (0 + ... + args )
+
+    Same Can use multiply,div,etc. instead of add.
+
+    Division will have order problems like
+        Right: (args / ...)     // 1 / (2 / (3 / 4)) = 0.375
+        Left: (... / args)      // (((1/2)/3)/4) = 0.416
+
+    
+
+
+Standard Template Library (STL)
+    They are called containers.
+    Using templates: Generic Containers
+
+
+Queue:
+    FIFO
+    Comes under #include<queue>
+    Ex:
+        queue<int> q_int;
+    Methods:
+        Push (to add element)
+        Front (to get top element)
+        Back (to print last element)
+        Empty (to know if empty())
+        Size() : how many elements
+        pop : remove elemnt from front
+    Ex:
+        queue<int> q;
+        q.push(10);
+        q.push(20);
+        q.push(30);
+
+        cout << q.back() << q.front();
+        q.pop();
+        cout << q.empty();      // 0 if not empty 1 if empty
+
+
+Priority Queue / Heap:
+    Always sorted in descending order from big to small
+
+    // By Defaulat Max Heap
+    priority_queue<int> heap;
+
+    // Min Heap
+    priority_queue<int, vector<int>,greater<int>> heap;
+
+    almost same methods as queue
+        Except front() we have top();
+
+    Ex:
+        priority_queue <int> pq;
+        pq.push(3); // 3
+        pq.push(5); // 5 3
+        pq.push(1); // 5 3 1
+        pq.push(7); // 7 5 3 1
+        cout << pq.top();       // 7
+
+
+Deque:
+    Add/Remove both in back and front
+
+    Methods:
+        Add front:          push_front()
+        Add end:            push_back()
+        Get front:          front()
+        Remove front:       pop_front()
+        Get back:           back()
+        Remove back:        pop_back()
+        Total elements:     size()
+        any more elements:  empty()
+
+    Can print in any two directions
+
+    Ex:
+        deque<int> q;
+        q.push_back(10);
+        cout << q[0];
+    
+
+Stack:
+    Reverse of Queue. Removal and insertion happens on top
+    Almost Same Methods
+    
+    Ex:
+        stack<int> s;
+        s.push(10);
+        s.push(20);
+        s.push(30);     
+
+        cout << s.top();    // 30
+
+        // s = 10 20 30
+    
+
+Pair:
+    pair of any two types
+    special version of tuple that takes only two types value
+
+    pair<int,string> p = make_pair(10,"ayu");
+    cout<<p.first<<p.second;
+
+    pair<int,pair<int,string>> p2;
+    Comparison bw two pairs:
+        it first compares p.first then moves to p.second
+
+Tuple:
+    a generalization of pair
+
+    tuple<char,int,string> t1 = make_tuple('c',10','ayu');
+    
+    Get values in tuple:
+        cout<< get<0>(t1) << get<1>(t1) ;
+
+    Set values:
+        get<0>(t1) = 'd';
+
+    Unpack values of tuple using tie:
+        char ch;
+        int val;
+        string name;
+        tie(ch,val,name) = t1;
+        cout<<name;
+
+    Concat two tuples using tuple_cat:
+        auto t2 = tuple_cat(t1,make_tuple(10.6));
+
+
+Iterators:
+    its an object
+    use to print position in an array
+
+    Iterator:
+        deque<int> q {1,2,3,4,5};
+        deque<int>::iterator it = q.begin();              // like a class inside queue
+
+        while(it != q.end()){
+            cout<<*it;
+            ++it;
+        }
+
+
+    Reverse Iterator:
+        deque<int>::reverse_iterator it = q.rbegin();
+        
+        while(it != q.rend()){
+            cout<<*it;
+            ++it;
+        }  
+
+        Another Way:
+            for(auto it = q.rbegin(); it != q.rend(); ++it){        // saves time of initalising reverse_iterator
+                cout<<*it;
+            }
+
+    Access element index: auto it = q.begin() + 3;        // Fourth element position
+
+    Const_interator:
+        deque<int>::const_iterator it = q.cbegin();
+        
+        while(it != q.cend()){
+            cout<<*it;
+            // *it = 10;        // Can't change values
+            ++it;
+        } 
+
+
+    Can iterate on most data structures like vectors,set,map,etc. except: stack, queue, priority_queue.
+    
+    Even can iterate on string:
+        for(auto it = str.begin(); it != str.end(); ++it){}
+
+
+
+Range Based For Loop:
+    int arr[] {1,2,3};
+
+    for(auto val : arr){
+        cout << val;                // 1 2 3
+    }
+
+    For stl:
+        deque<int> q {1,2,3,4,5};
+        for(const auto &val : q)
+            cout<< val;         // 1 2 3 4 5
+
+    
+Vector:
+    Act like an array but dynamic
+
+    vector<int> v1;
+
+    v1.push_back(30);
+    v1.push_back(10);
+    v1.push_back(50);
+
+    // v.clear()    To empty array
+
+    for (int i = 0 ; i < (int) v1.size(); i++){
+        cout << v1[i];
+    }
+
+    vector <int> v2 (5,7);          // 5 elements initialized with 7
+    v2.push_back(10);
+    for(auto &val : v2)
+        cout<< val;
+
+    To access index use:
+        v2.at(3);
+        Gives exception if index out of bounds
+
+    Erase:
+        vector <int> v {1,-1,2,3,4,-5,6};
+        for(auto it = v.begin(); it != v.end();){
+            if(*it < 0){
+                it = v.erase(it);    // MUST use returned value as it points to next element
+                cout << *it;        // 2 6
+            }
+            else{
+                it++;
+            }
+        }
+
+    Find Element:
+        auto it = find(v.begin(),v.end(),-5)        // Searching for -5
+        cout << *it;                                // 6th Position
+
+    Insert:
+        if(it != v.end()){              // if not found
+            vector<int> v2 {8,9,10};
+            v.insert(it,v2.begin(),v2.end());       // That means before -5
+        }   //  1 -1 2 3 4 8 9 10 -5 6
+
+
+2D Vector:
+    vector<string> matrix {"ayu","yo","ball"}; // as string is a vector in itself
+    // above is 2d vector
+    cout << matrix.size();          // 3 - no of rows
+
+    For int:
+        vector<int> row(5,1)        // 5 elements each is 1
+        vector< vector<int> > v2d(3,row)    // 3 rows each is 5 values of 1
+
+
+3D Vector:
+    vector<vector<vector<int>>> v3d(5, vector<vector<int>>(6,vector<int>(7)))
+    // 5 x 6 x 7
+
+
+
+String:
+    string test = " hi abc abc abc abc";
+
+    substr:
+        cout << tes.substr(3);  // Starting index - abc abc abc abc
+        cout << tes.substr(3,5);  // Starting, Ending(included) index - abc
+
+    find:
+        cout << test.find("abc");       // 3
+        cout << test.find("abc",5);     // start the search from 6th character - 7
+        cout << test.find("Ayu");       // Not found so returns a large number
+        cout << (int) test.find("Ayu"); // -1; 
+        // More professional way is to compare with '::npos' ex: 
+            if(found == string::npos) cout<<"Not found";
+         
+    Find for a character from a given String:
+        cout << test.find_last_of("cab");       // 17 - Going to search letter by letter and will return last positn
+        cout << test.find_first_of("aic");      // 1 - similarly as above but from start
+        cout << test.find_first_of("aic",4);    // 5 - start search after 5 chars
+        cout << test.find_first_not_of("aic");  // 0 - "h" as h is not in "aic"
+
+    Replace:
+        test.replace(4,3,"x");  // Replace from 4, 3 characters i.e. "bc " with given string "x"
+        cout<<test;         // hi axabc abc abc
+
+
+Algorithms:
+
+    sort:
+        vector<int> v{10,9,8,7,6};
+
+        sort(v.begin() + 1, v.end());       // sort from v[1] till end - 10 6 7 8 9
+        
+        sort(v.begin(), v.end());       // sort in ascending order - 6 7 8 9 10
+
+        sort(v.rbegin(), v.rend());       // sort in descending order - 10 9 8 7 6
+
+    reverse:    Reverses the vector 
+        vector<int> v{10,9,5,7,6};
+
+        reverse(v.begin(),v.end()) ;    // 6 7 5 9 10
+
+ 
+Set:
+    always sorted and no duplicates
+    
+
+    set<string> strSet;
+    strSet.insert("Ayu");
+    strSet.insert("Yad");
+    strSet.insert("Ayu");
+
+    for(string x : strSet){
+        cout<<x;        // Ayu Yad
+    }
+    
+    // Slow Way:
+    if(strSet.count("Ayu")) cout<< "YES";
+
+    // Fast Way:
+    set<string>::iterator it = strSet.find("Ayu");
+    // or auto it = strSet.find("Ayu");
+    
+    // To delete
+    if(it != strSet.end()) strSet.erase(it);
+
+    for(string x : strSet){
+        cout<<x;        // Yad
+    }
+
+Multisets:
+    sorted and not unique
+
+    multiset<strin> strSet;
+    strSet.insert("Ayu");
+    strSet.insert("Yad");
+    strSet.insert("Ayu");
+
+    for(string x : strSet){
+        cout<<x;        // Ayu Yad Ayu
+    }
+    
+    // Slow Way:
+    if(strSet.count("Ayu")) cout<< "YES";
+
+    // Fast Way:
+    set<string>::iterator it = strSet.find("Ayu");
+    // or auto it = strSet.find("Ayu");
+    
+    // To delete
+    if(it != strSet.end()) strSet.erase(it);
+
+    for(string x : strSet){
+        cout<<x;        // Yad Ayu
+    }
+
+
+For structures there is a separate way for sets as it need to compare to sort: Refer 167 at 4:10
+
+Unordered Set:
+    doesn't order elements, Remove duplicates
+    Can't change values
+    to change 'find' it remove it and insert a value
+
+    unordered_set<int> s1{1,2,3,4,5};
+
+Same is unordered_multiset
+
+Common things of SETS:
+    int arr[] {1,2,3,4,5};
+    unordered set<int> s2(arr,arr+3)
+
+    s1.swap(s2); // Swapping Operation
+
+    set<int> sorteds(s1.begin(),s1.end());
+
+Map:
+    use to have key value pairs
+
+    map<string, int> mp;
+    mp["a"] = 10;
+    mp["b"] = 20;
+    mp["c"] = 30;
+
+    for( const pair <string,int> &item : mp){
+        cout << item.first << item.second;     
+    }
+
+    auto it = mp.find("a");
+    if(it != mp.end()) mp.erase(it);
+
+Same with multimap
+
+
+
+
+
+
+
+Structured Binding:
+
+    int arr[] {1,2,3,4};
+
+    // nO. of elements here must match size of array
+    auto [a,b,c,d] = arr;       
+
+    // By reference
+    auto &[a,b,c,d] = arr;
+
+    // For struct having name and salary as members
+    auto [name, salary] = empStruct; 
+
+    // Can do with pair,tuple,map too
+
+
+

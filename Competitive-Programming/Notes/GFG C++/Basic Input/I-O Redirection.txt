@@ -1,0 +1,65 @@
+Streams Objects mainly of three types :
+    istream : Only perform input operations from the stream
+    ostream : Used for output operations.
+    iostream : Used for both input and output operations
+
+* All these classes, as well as file stream classes, derive from the classes: ios and streambuf. 
+* Thus filestream and IO stream objects behave similarly.
+* All stream objects also have an associated data member of class streambuf.
+* Simply put streambuf object is the buffer for the stream. When we read data from a stream, we don’t read it directly from the source, but instead, we read it from the buffer which is linked to the source.
+* Similarly, output operations are first performed on the buffer, and then the buffer is flushed (written to the physical device) when needed.
+
+
+Redirect Stream Buffer from A to B:
+    1. Get the stream buffer of A and store it somewhere
+    2. Set the stream buffer of A to the stream buffer of B
+    3. If needed reset the stream buffer of A to its previous stream buffer
+
+ios::rdbuf() :
+    1) stream_object.rdbuf(): Returns pointer to the stream buffer of stream_object
+    2) stream_object.rdbuf(streambuf * p): Sets the stream buffer to the object pointed by p
+
+Example:
+// Cpp program to redirect cout to a file 
+#include <fstream> 
+#include <iostream> 
+#include <string> 
+using namespace std; 
+int main() 
+{ 
+    fstream file; 
+    file.open("cout.txt", ios::out); 
+    string line; 
+  
+    // Backup streambuffers of  cout 
+    streambuf* stream_buffer_cout = cout.rdbuf(); 
+    streambuf* stream_buffer_cin = cin.rdbuf(); 
+  
+    // Get the streambuffer of the file 
+    streambuf* stream_buffer_file = file.rdbuf(); 
+  
+    // Redirect cout to file 
+    cout.rdbuf(stream_buffer_file); 
+  
+    cout << "This line written to file" << endl; 
+  
+    // Redirect cout back to screen 
+    cout.rdbuf(stream_buffer_cout); 
+    cout << "This line is written to screen" << endl; 
+  
+    file.close(); 
+    return 0; 
+}
+
+Output:
+    This line is written to screen
+    Contents of file cout.txt:
+    This line written to file
+
+
+Note:
+    The above steps can be condensed into a single step
+    auto cout_buf = cout.rdbuf(file.rdbuf())
+    // sets couts streambuffer and returns the old streambuffer back to cout_buf
+
+

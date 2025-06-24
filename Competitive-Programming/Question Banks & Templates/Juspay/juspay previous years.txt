@@ -1,0 +1,279 @@
+graphs:
+
+BFS - DFS
+Dijkstra
+Floyd Warshall
+MST
+Prims and krushkal
+bridges
+articulation points
+cut vertex
+cycle detection
+
+
+Tres:
+BST & BT
+Least Common ancestor
+BT is a full BT or not
+mirror image
+
+
+
+
+
+Converging maze, 
+max node problem
+nearest maerging cell
+N queen, 
+egg drop problem, 
+and employer problem(based on pigeon hole principle)
+cube rotation
+
+• You are given a maze with N cells. Each cell may have multiple entry points but not more than one exit (ie. entry/exit points are unidirectional doors like valves).
+The cells are named with an integer value from 0 to N-1.
+You need to find the the length of the largest cycle in the maze. Return -1 if there are no cycles.
+
+
+Problem statement: You are given a maze with N cells. Each cell may have multiple entry points but not more than one exit (ie. entry/exit points are unidirectional doors like valves). The cells are named with an integer value from 0 to N-1. You need to find the following :
+Nearest meeting cell: Given any two cells - C1,C2, find the closest cell Cm that can be reached from both C1 and C2.
+Note: Aim for O(Log(N)) solution.
+INPUT FORMAT - First line has the number of cells N
+Second line has list of N values of the edge[] array. edge[i] contains the cell number that can be reached from of cell ‘i’ in one step. edge[i] is -1 if the ‘i’th cell doesn’t have an exit.
+Third line contains two cell numbers whose nearest meeting cell needs to be found. (return -1 if there is no meeting cell from the two given cells) .
+OUTPUT FORMAT - Find nearest meeting cell (NMC).
+ 
+
+Lockable Tree, 
+Set Matrix Zeoes ( Leetcode )
+
+Converging maze: max weight
+
+N ary problems
+
+
+
+3 Graph-based question
+
+Given the graph consist of pair and weight attached to it. Print out the node having the maximum number of inorder weights. (Node having maximum sum weight ).
+Given the graph, Print out the maximum weight Cycle of the graph. ( Cycle which having maximum sum weight ).
+Given the 2 nodes. Print the shortest path between them. ( Return the array contains the path).
+
+
+Next first greatest element
+
+Find the first missing element.
+
+Tree Traversal without extra space
+
+
+In a social network, it allows users to connect with each other and it's modelled in a directed social network graph.
+Find if N can meet M. Given no of users and thier connection
+
+
+
+1.converging maze nearest meeting cell
+2.converging maze maximumweight node
+3. converging maze largest sum cycle program
+
+
+Question based on Graph Data Structure. Questions were like finding the closed cell that can be reached from both the nodes, finding the number of maximum weighted node and finding the largest length of the cycle.
+
+
+
+You are given a maze with N cells. Each cell may have multiple entry points but not more than one exit (ie. entry/exit points are unidirectional doors like valves).
+The cells are named with an integer value from 0 to N-1.
+You need to find the the length of the largest cycle in the maze. Return -1 if there are no cycles.
+INPUT FORMAT
+First line has the number of cells N
+Second line has list of N values of the edge[] array. edge[i] contains the cell number that can be reached from of cell ‘i’ in one step. edge[i] is -1 if the ‘i’th cell doesn’t have an exit.
+OUTPUT FORMAT
+length of the largest cycle.
+Sample input:
+23
+4 4 1 4 13 8 8 8 0 8 14 9 15 11 -1 10 15 22 22 22 22 22 21
+Sample output
+6
+
+
+
+
+question no: 1
+===================
+You are given a forest (it may contain a single tree or more than one tree) with N nodes.
+Each node is given an integer value 0 to (N­-1).
+You have to find:
+==================
+The depth of forest at which maximum number of nodes are present.
+N can be very large. Aim for an algorithm with a time complexity of O(N).
+INPUT FORMAT
+=================
+An integer T, denoting the number of testcases, followed by 2T lines, as each testcase will contain 2 lines.
+First line of each testcase has the value of N.
+Second line of each testcase has list of N values where the number at index i is the parent of node i. The parent of root is -1. ( The index has the range [0, N­-1] ).
+OUTPUT FORMAT
+===============
+For each testcase given, output a single line that has the depth of forest at which maximum number of nodes are present. If multiple depths has same number of nodes, then deepest depth should be selected.
+SAMPLE INPUT
+==============
+2
+6
+5 -1 1 1 5 2
+13
+4 3 -1 -1 1 2 7 3 1 4 2 1 2
+SAMPLE OUTPUT
+====================
+3
+1
+
+question no 2:
+==================
+You are given a forest (it may contain a single tree or more than one tree) with N nodes.
+Each node is given an integer value 0 to (N­-1).
+You have to find:
+==================
+Level order traversal: print nodes at every level of the forest.
+N can be very large. Aim for an algorithm with a time complexity of O(N).
+INPUT FORMAT
+==============
+An integer T, denoting the number of testcases, followed by 2T lines, as each testcase will contain 2 lines.
+First line of each testcase has the value of N.
+Second line of each testcase has list of N values where the number at index i is the parent of node i. The parent of root is -1. ( The index has the range [0, N­-1] ).
+OUTPUT FORMAT
+================
+For each testcase given, Suppose m is the height of tree, then next m lines must contain the nodes of that level in ascending order separated by space. After printing level order traversal of each testcase, print a new line.
+SAMPLE INPUT
+================
+2
+6
+5 -1 1 1 5 2
+13
+4 3 -1 -1 1 2 7 3 1 4 2 1 2
+SAMPLE OUTPUT
+===============
+1
+2 3
+5
+0 4
+
+2 3
+1 5 7 10 12
+4 6 8 11
+0 9
+
+
+Question 03:
+-------------
+You are given a forest (it may contain a single tree or more than one tree) with N nodes.
+Each node is given an integer value 0 to (N­-1).
+You have to find:
+==================
+Nearest common ancestor of two given nodes x1 and x2.
+N can be very large. Aim for an algorithm with a time complexity of O(N).
+INPUT FORMAT
+-------------
+An integer T, denoting the number of testcases, followed by 3T lines, as each testcase will contain 3 lines.
+First line of each testcase has the value of N.
+Second line of each testcase has list of N values where the number at index i is the parent of node i. The parent of root is -1. ( The index has the range [0, N­-1] ).
+Third line for each testcase contains two integers within the range of [0,N­-1] whose common ancestor you have to find.
+OUTPUT FORMAT
+==============
+For each testcase given, output a single line that has the nearest common ancestor to two given nodes x1 and x2. If a common ancestor is not present then output '-1'.
+SAMPLE INPUT
+-------------
+2
+6
+5 -1 1 1 5 2
+0 3
+13
+4 3 -1 -1 1 2 7 3 1 4 2 1 2
+8 5
+SAMPLE OUTPUT
+================
+1
+-1
+
+
+
+In a ludo snake game, you have to design an algorithm to reach from 30 to 100 in the minimum number of steps.
+
+
+
+graph,detect maximum cycle sum
+
+
+
+converging maze ,find the nearest meeting point
+
+
+
+I was given 3 questions on trees.First one was to find the lowest common ancestor and the other was to find the node with a maximum weight(max weight defined as the sum of edges of nodes which were incident on that node).
+
+
+
+Given two sorted arrays of size m and n+m. Merge them in to 1 single sorted array with out extra space and in o(n) time.
+
+
+To check if a substring is rotated or not in a given string
+
+
+
+In online test they ask to write the program of minimum distance in 2 City there is n number of cities,
+
+
+lca of binary tree
+lca of binary search tree
+trie
+
+
+Tree Traversal
+ 
+ 
+ 
+-> construct a tree and find depth where maximum no. of nodes are present
+-> construct a tree and print it in level order traversal
+-> construct a tree and find the nearest common parent node
+
+
+converging maze
+1) largest cycle
+2) maximum input point
+3) shortest meeting point between 2 nodes.
+
+
+Find the largest cycle in a given graph
+
+
+
+The Question:
+Input:
+23 (Number of nodes)
+4 4 3 13 0 -1 ... 23 values (Edge array.. Edge[i] value indicates the node connected to "i" node. For example. First value E[0] is 4. This means the node with value 0 to connected directly to node with value 4)
+9 2 ( Find the node with shortest distance from 9 and 2 )
+Output: The node with shortest distance ( Where 9 and 2 can meet )
+Second question was to count the number of edges in the graph.
+One more question was to find the exit points in the graph for a node. If the next node is -1, It implies an exit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

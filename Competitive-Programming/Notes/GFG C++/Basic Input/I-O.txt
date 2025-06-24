@@ -1,0 +1,72 @@
+Streams:
+    Input and output are performed in the form of a sequence of bytes or more commonly known as streams.
+
+Input Stream: 
+    If the direction of flow of bytes is from the device(for example, Keyboard) to the main memory then this process is called input.
+
+Output Stream: 
+    If the direction of flow of bytes is opposite, i.e. from main memory to device( display screen ) then this process is called output.
+
+Program:
+    Keyboard: cin
+    Screen: cout
+
+    Screen:
+        cerr
+        clog
+
+
+
+Header files:
+
+    iostream: 
+        iostream stands for standard input-output stream. This header file contains definitions to objects like cin, cout, cerr etc.
+
+    iomanip: 
+        iomanip stands for input output manipulators. The methods declared in this files are used for manipulating streams. This file contains definitions of setw, setprecision, etc.
+
+    fstream: 
+        This header file mainly describes the file stream. This header file is used to handle the data being read from a file as input or data being written into the file as output.
+
+
+
+Standard output stream (cout):
+    instance of the ostream class
+    Syntax: cout<<"Yolo";
+
+standard input stream (cin):
+    instance of the class istream
+    Syntax: cin>>age>>n; // Multiple inputs
+
+Un-buffered standard error stream (cerr):
+    * used to output the errors
+    * instance of iostream class
+    * As it is un-buffered so it is used when one needs to display the error message immediately. It does not have any buffer to store the error message and display later.
+    * Syntax: cerr << "An error occured";
+
+buffered standard error stream (clog):
+    * instance of iostream class
+    * used to display errors but unlike cerr the error is first inserted into a buffer and is stored in the buffer until it is not fully filled. 
+    * error message will be displayed on the screen too
+    * Syntax: clog << "An error occured"; 
+
+scanf:
+    scanf("`format_specifier`", &val)
+    Example: 
+        char ch;
+        double d;
+        scanf("%c %lf", &ch, &d);
+
+printf:
+    printf("`format_specifier`", val)
+    Example:
+        char ch = 'd';
+        double d = 234.432;
+        printf("%c %lf", ch, d);
+
+Note: 
+    You can also use cin and cout instead of scanf and printf 
+    However, if you are taking a million numbers as input and printing a million lines, it is faster to use scanf and printf.
+
+Precision in float/double values:
+    printf("%.3f", e); //It prints the floating point accurately up to 3 decimal places.

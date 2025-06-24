@@ -1,0 +1,118 @@
+Buffer:
+    * A temporary storage area 
+    * All standard input and output devices contain an input and output buffer. 
+    * streams are buffered, for example in the case of standard input, when we press the key on keyboard, it isn’t sent to your program, rather it is buffered by operating system till the time is allotted to that program.
+
+How does it effect Programming:
+    * you may need to clear the unwanted buffer so as to get the next input in the desired container and not in the buffer of previous variable
+    * After encountering “cin” statement, we require to input a character array or a string , we require to clear the input buffer or else the desired input is occupied by buffer of previous variable, not by the desired container.
+    * On pressing “Enter” (carriage return) on output screen after the first input , as the buffer of previous variable was the space for new container(as we did’nt clear it) , the program skips the following input of container.
+    
+
+Problem:
+    int main() 
+    { 
+        int a; 
+        char ch[80]; 
+        
+        // Enter input from user  
+        // - 4 for example 
+        cin >> a; 
+        
+        // Get input from user - 
+        // "GeeksforGeeks" for example 
+        cin.getline(ch,80); 
+        
+        // Prints 4 
+        cout << a << endl; 
+        
+        // Printing string : This does  
+        // not print string 
+        cout << ch << endl; 
+        
+        return 0; 
+    }
+
+Resolve:
+
+1.  cin.ignore(numeric_limits::max(),’\n’); :
+    *  Typing it after the “cin” statement discards everything in the input stream including the newline.
+    * Example:
+        // for <streamsize> 
+        #include<ios>      
+        // for numeric_limits 
+        #include<limits>  
+        using namespace std; 
+        
+        int main() 
+        { 
+            int a; 
+            char str[80]; 
+            
+            // Enter input from user  - 4 for example 
+            cin >> a; 
+            
+            // discards the input buffer 
+            cin.ignore(numeric_limits<streamsize>::max(),'\n'); 
+            
+            // Get input from user -   GeeksforGeeks for example 
+            cin.getline(str, 80); 
+            
+            // Prints 4 
+            cout << a << endl; 
+            
+            // Printing string : This will print string now 
+            cout << str << endl; 
+            return 0; 
+        } 
+
+2. cin.sync() :
+    * Typing it after the “cin” statement discards all that is left in buffer. 
+    * Though it does not work in all implementations according to C++ above standards
+    * Example:
+        int main() 
+        { 
+            int a; 
+            char str[80]; 
+            
+            // Enter input from user  - 4 for example 
+            cin >> a; 
+            
+            // Discards the input buffer 
+            cin.sync(); 
+            
+            // Get input from user - GeeksforGeeks for example 
+            cin.getline(str, 80); 
+            
+            // Prints 4 
+            cout << a << endl; 
+            
+            // Printing string - this will print string now 
+            cout << str << endl; 
+            return 0; 
+        } 
+
+3. cin >> ws : 
+    * Typing it after “cin” statement tells the compiler to ignore buffer and also to discard all the whitespaces before the actual content of string or character array.
+    * Example:
+        int main() 
+        { 
+            int a; 
+            string s; 
+            
+            // Enter input from user - 4 for example 
+            cin >> a; 
+            
+            // Discards the input buffer and intial white spaces of string 
+            cin >> ws; 
+            
+            // Get input from user - GeeksforGeeks for example 
+            getline(cin, s); 
+            
+            // Prints 4 and GeeksforGeeks : will execute print a and s 
+            cout << a << endl; 
+            cout << s << endl; 
+            return 0; 
+        }
+
+ 

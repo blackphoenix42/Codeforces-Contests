@@ -1,0 +1,39 @@
+Dynamically allocated memory is allocated on "Heap" and non-static and local variables get memory allocated on "Stack"
+
+Dynamically allocated memory like “int *p = new int[10]”, it is programmers responsibility to deallocate memory when no longer needed. 
+If programmer doesn’t deallocate memory, it causes memory leak (memory is not deallocated until program terminates).
+
+new operator:
+    If sufficient memory is available, new operator initializes the memory and returns the address of the newly allocated and initialized memory to the pointer variable.
+    Syntax:
+        pointer-variable = new data-type;
+        ex: int *p = new int; 
+
+    Initialize:
+        float *q = new float(75.25);
+
+    Allocate Block of Memory:
+        int *p = new int[10]
+        
+        Dynamically allocates memory for 10 integers continuously of type int and returns pointer to the first element of the sequence, which is assigned to p(a pointer). 
+        p[0] refers to first element, p[1] refers to second element and so on.
+
+Not enough memory available during runtime:
+    The new request indicates failure by throwing an exception of type std::bad_alloc 
+    unless “nothrow” is used with the new operator, in which case it returns a NULL pointer 
+    Example:
+    // Used to check pointer
+    
+    int *p = new(nothrow) int;
+    if (!p){
+        cout << "Memory allocation failed\n";
+    }
+
+delete operator:
+    Syntax: delete pointer-variable;  
+    Example: delete p;
+
+    To delete memory of block of array:
+        delete[] pointer-variable;  // It will free the entire array pointed by variable 
+
+

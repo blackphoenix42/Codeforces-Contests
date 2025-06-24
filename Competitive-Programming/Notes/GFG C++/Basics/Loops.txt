@@ -1,0 +1,15 @@
+for (initialization expr; test expr; update expr)
+{    
+}
+
+
+while (test_expression)
+{
+  update_expression;
+}
+
+
+do
+{
+ update_expression;
+} while (test_expression);

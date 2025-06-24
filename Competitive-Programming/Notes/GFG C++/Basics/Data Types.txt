@@ -1,0 +1,54 @@
+Primary:
+    int (%d)
+    char (%c) 
+    bool -   true / false
+    float  (%f)   
+    double  (%lf)
+    void - means valueless entity
+    wchar_t - Wide Char also is a char type but it is 2 or 4 bytes long 
+    
+string - get string input
+
+Derived:
+    Function
+    Array
+    Pointer
+    Reference
+
+Abstract / User-Defined:
+    Class
+    Structure
+    Union
+    Enumeration
+    Typedef defined DataType
+
+
+Modifiers:
+    Signed  
+    Unsigned
+    Short
+    Long (%ld)
+
+
+DATA TYPE	             SIZE (IN BYTES)	        RANGE
+
+SHORT INT	                 2	            -32,768 TO 32,767
+UNSIGNED SHORT INT	         2	                0 TO 65,535
+UNSIGNED INT	             4	             0 TO 4,294,967,295
+INT	(%d)                     4	            -2,147,483,648 TO 2,147,483,647 // -(2^31) TO (2^31)-1
+LONG INT (%ld)	             8	            -2,147,483,648 TO 2,147,483,647
+UNSIGNED LONG INT	         8	             0 TO 4,294,967,295
+LONG LONG INT	             8	            -(2^63) TO (2^63)-1
+UNSIGNED LONG LONG INT	     8	            0 TO 18,446,744,073,709,551,615
+SIGNED CHAR	(%c)             1	               -128 TO 127
+UNSIGNED CHAR	             1	                0 TO 255
+FLOAT (%f)	                 4	 
+DOUBLE (%lf)	             8	 
+LONG DOUBLE	                 12	 
+WCHAR_T	                   2 OR 4	         1 WIDE CHARACTER
+
+
+
+sizeof:
+    cout << sizeof(char) // 1 byte
+

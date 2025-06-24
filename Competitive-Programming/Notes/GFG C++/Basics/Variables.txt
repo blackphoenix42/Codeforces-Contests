@@ -1,0 +1,31 @@
+Declaration:
+    int a,b,c;
+
+Types:
+    Local Variables
+    Instance Variables
+    Static Variables
+
+Local Variables:
+    * A variable defined within a block or method or constructor
+    * These variable are created when the block in entered or the function is called and destroyed after exiting from the block or when the call returns from the function.
+    * Initilisation of Local Variable is Mandatory.
+
+
+Instance Variables:
+    * They are non-static variables and are declared in a class outside any method, constructor or block.
+    * As instance variables are declared in a class, these variables are created when an object of the class is created and destroyed when the object is destroyed.
+    * Unlike local variables, we may use access specifiers for instance variables. If we do not specify any access specifier then the default access specifier will be used.
+    * Initilisation of Instance Variable is not Mandatory.
+    * Instance Variable can be accessed only by creating objects.
+
+
+Static Variables / Class Variables:
+    * These variables are declared similarly as instance variables, the difference is that static variables are declared using the static keyword within a class outside any method constructor or block.
+    * Unlike instance variables, we can only have one copy of a static variable per class irrespective of how many objects we create.
+    * Static variables are created at the start of program execution and destroyed automatically when execution ends.
+    * Initialization of Static Variable is not Mandatory. Its default value is 0
+    * If we access the static variable like Instance variable (through an object), the compiler will show the warning message and it won’t halt the program. The compiler will replace the object name to class name automatically.
+    * If we access the static variable without the class name, Compiler will automatically append the class name.
+    * Syntax to access-          class_name::variable_name; 
+    

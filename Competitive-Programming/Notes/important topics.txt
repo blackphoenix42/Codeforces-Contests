@@ -1,0 +1,128 @@
+ArrayList
+
+Sorting
+	Insertion
+	Selection
+	Bubble
+	Count
+	Radix
+	cyclic sort
+	
+Searching
+	Linear Search
+	Binary Search
+	Modified Binary Search
+	
+Sliding Window
+
+Two Pointer
+
+Subarray
+
+
+Strings
+	comparison of methods
+	operations in strings
+	Stringbuilder in java
+	
+
+
+Maths
+	bitwise operators
+	Prime Numbers
+	HCF / LCM
+	Sieve of Erastosthenes
+	Newton's Sq Root Method
+	Number Theory
+	Euciledean Algo
+	
+
+Advance Concepts of Cp
+	Bitwise + DP
+	Extended Euciledean algo
+	modulo properties
+	modulo multiplicative inverse
+	linear diophantine equations
+	fremats theorem
+	wilsons theorem
+	lucas theorem
+	chinese remainder theorem
+	knapsack 0/1
+	
+	
+Funcitons
+	shadowing
+	variable length arguments
+	
+
+Space & TIme COmplexity
+	solve linear recurrence relations
+	solve divide and conquer recurrence relations
+	big O, big theta big omega
+	NP completeness and hardness
+	
+
+Backtracking
+	sudoku solver
+	N queens
+	N knights
+	Maze problems
+	
+Subset
+
+Singleton Class 
+
+final-finalize-finally
+
+
+Binary trees
+	dfs
+	bfs
+	avl tree
+	segment tree
+	red black (not needed)
+	
+Square root decomposition
+
+Two heaps methods
+	k way merge
+	top k elements
+	
+hashmaps
+	chaining
+	probing
+	
+
+tries
+
+graphs
+	minimum spanning tree
+	kruskal algo
+	prims algo
+	dijkstra shortest path
+	topological sort
+	bellman ford algo
+
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

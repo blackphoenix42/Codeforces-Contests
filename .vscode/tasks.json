@@ -23,7 +23,7 @@
       "problemMatcher": ["$gcc"],
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
       "detail": "Builds the current C++ file using MSYS2 GCC (C++23)"
     },
@@ -36,9 +36,18 @@
       },
       "presentation": {
         "reveal": "always",
-        "panel": "dedicated"
+        "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Compile & Run C++",
+      "dependsOn": ["C++23 Build with MSYS2 GCC", "Run Compiled Executable"],
+      "dependsOrder": "sequence",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "Start Template Watcher",
