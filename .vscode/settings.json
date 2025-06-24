@@ -5,7 +5,7 @@
     "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
     "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "zig": "zig run",
-    "cpp": "cd $dir && g++ -std=c++23 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+    "cpp": "cd $dir && g++ -std=c++23 -Wextra -Wall -O2 -DLOCAL $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "php": "php",
     "python": "python -u",
