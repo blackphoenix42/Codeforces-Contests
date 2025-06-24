@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  blackphoenix42
- *    Created:
+ *    Created: 2025-06-24 16:25:21
  *    Profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -386,11 +386,7 @@ ll mod_inv_general(ll a, ll m) {
 
 // nCr % MOD using Fermat's Little Theorem (MOD must be prime)
 const int MAXN = 2e5 + 5;
-#ifndef ONLINE_JUDGE
 ll fact[MAXN], inv_fact[MAXN];
-#else
-static ll fact[MAXN], inv_fact[MAXN];
-#endif
 
 void precompute_factorials(int n) {
     fact[0] = inv_fact[0] = 1;
@@ -541,7 +537,24 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    string s;
+    cin >> s;
+    string target = "hello";
+    int idx = 0;
+
+    EACH(c, s) {
+        if (c == target[idx]) {
+            idx++;
+            if (idx == sz(target)) break;
+        }
+    }
+
+    if (idx == sz(target))
+        YES;
+    else
+        NO;
+}
 
 int main() {
     fastio();
@@ -549,11 +562,11 @@ int main() {
     clock_t start = clock();
 #endif
 
-    int t = 1;
-    cin >> t;
-    while (t--) {
-        solve();
-    }
+    //   int t = 1;
+    //   cin >> t;
+    //   while (t--) {
+    solve();
+    //   }
 
 #ifdef LOCALCLK
     cerr << "\n[Execution Time]: " << fixed << setprecision(3)
