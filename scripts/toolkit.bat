@@ -20,7 +20,7 @@ echo 🛠 Competitive Programming Toolkit
 echo ====================================
 echo 🔍 Detected Executable: %EXE_NAME%
 echo.
-echo 1. Run Auto-Test (tests/input*.txt)
+echo 1. Run Auto-Test (scripts/tests/input*.txt)
 echo 2. Run Stress Tester (needs gen.exe, brute.exe)
 echo 3. Interactive Input Test
 echo 4. Post-Contest Cleanup
