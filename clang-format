@@ -1,0 +1,14 @@
+# Rename the file to .clang-format
+
+BasedOnStyle: Google
+BraceWrapping:
+  AfterFunction: false
+  AfterClass: false
+  AfterStruct: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterNamespace: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
