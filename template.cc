@@ -1,8 +1,8 @@
 /**
  *    Name:    Ayush Yadav
- *    author:  blackphoenix42
- *    created:
- *    profile: https://codeforces.com/profile/blackphoenix42
+ *    Author:  blackphoenix42
+ *    Created:
+ *    Profile: https://codeforces.com/profile/blackphoenix42
  **/
 
 #include <bits/stdc++.h>

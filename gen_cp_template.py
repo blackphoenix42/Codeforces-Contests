@@ -11,8 +11,8 @@ def load_template():
     with open(TEMPLATE_FILE, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
     for i, line in enumerate(lines):
-        if "*    created:" in line:
-            lines[i] = f" *    created: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        if "*    Created:" in line:
+            lines[i] = f" *    Created: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
             break
     return "\n".join(lines)
 
