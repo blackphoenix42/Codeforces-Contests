@@ -62,6 +62,17 @@
       "runOptions": {
         "runOn": "folderOpen"
       }
+    },
+    {
+      "label": "Run Auto Tester",
+      "type": "shell",
+      "command": "python",
+      "args": ["auto_test.py"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }
