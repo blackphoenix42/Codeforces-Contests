@@ -29,6 +29,8 @@ using vi = vector<int>;
 using vvi = vector<vi>;
 using vpii = vector<pii>;
 using vpll = vector<pll>;
+using i128 = __int128_t;
+using u128 = __uint128_t;
 
 // Macros
 #define pb push_back
@@ -60,10 +62,10 @@ using vpll = vector<pll>;
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
 #define REPN(i, n) FORN(i, 1, n)
-#define MAX(a, b) a = max(a, b)
-#define MIN(a, b) a = min(a, b)
-#define SQR(x) ((ll)(x) * (x))
-#define RESET(a, b) memset(a, b, sizeof(a))
+#define CP_MAX(a, b) a = max(a, b)
+#define CP_MIN(a, b) a = min(a, b)
+#define CP_SQR(x) ((ll)(x) * (x))
+#define CP_RESET(a, b) memset(a, b, sizeof(a))
 #define nl '\n'
 #define el cout << '\n'
 #define print(x) cout << (x) << '\n'
@@ -74,7 +76,7 @@ using vpll = vector<pll>;
 #define freq(v)       \
     map<ll, ll> freq; \
     for (auto x : v)  \
-    freq[x]++
+        freq[x]++;
 
 #define lb lower_bound
 #define ub upper_bound
@@ -106,7 +108,7 @@ using vpll = vector<pll>;
 // For TESTING
 inline void OPEN(string s)
 {
-#ifndef TESTING
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
 #endif
@@ -348,6 +350,168 @@ ll mod_pow(ll a, ll b)
     return res;
 }
 ll mod_inv(ll a) { return mod_pow(a, MOD - 2); }
+ll mod_div(ll a, ll b) { return mod_mul(a, mod_inv(b)); }
+ll ceil_div(ll a, ll b) { return (a + b - 1) / b; }
+bool is_power_of_two(ll x) { return x && !(x & (x - 1)); }
+int digit_sum(ll x)
+{
+    int sum = 0;
+    while (x)
+        sum += x % 10, x /= 10;
+    return sum;
+}
+int digit_count(ll x)
+{
+    int cnt = 0;
+    while (x)
+        ++cnt, x /= 10;
+    return cnt;
+}
+
+vi prefix_sum(const vi &a)
+{
+    vi ps(a.size() + 1);
+    for (int i = 0; i < a.size(); ++i)
+        ps[i + 1] = ps[i] + a[i];
+    return ps;
+}
+
+vvi prefix_sum_2d(const vvi &grid)
+{
+    int n = grid.size(), m = grid[0].size();
+    vvi ps(n + 1, vi(m + 1));
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= m; ++j)
+            ps[i][j] = grid[i - 1][j - 1] + ps[i - 1][j] + ps[i][j - 1] - ps[i - 1][j - 1];
+    return ps;
+}
+ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
+ll ceil_sqrt(ll x)
+{
+    ll r = (ll)ceil(sqrtl(x));
+    while (r * r > x)
+        --r;
+    while ((r + 1) * (r + 1) <= x)
+        ++r;
+    return r;
+}
+
+// -------------------- Math Utils --------------------
+// Check primality (trial division up to sqrt(n))
+bool is_prime(ll n)
+{
+    if (n < 2)
+        return false;
+    for (ll i = 2; i * i <= n; ++i)
+        if (n % i == 0)
+            return false;
+    return true;
+}
+
+// GCD / LCM
+ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
+
+// Extended Euclidean Algorithm
+ll extended_gcd(ll a, ll b, ll &x, ll &y)
+{
+    if (b == 0)
+    {
+        x = 1, y = 0;
+        return a;
+    }
+    ll x1, y1;
+    ll g = extended_gcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - (a / b) * y1;
+    return g;
+}
+
+// Modular Inverse using Extended Euclidean (when MOD not prime)
+ll mod_inv_general(ll a, ll m)
+{
+    ll x, y;
+    ll g = extended_gcd(a, m, x, y);
+    if (g != 1)
+        return -1; // Inverse doesn't exist
+    return (x % m + m) % m;
+}
+
+// nCr % MOD using Fermat's Little Theorem (MOD must be prime)
+const int MAXN = 2e5 + 5;
+ll fact[MAXN], inv_fact[MAXN];
+
+void precompute_factorials(int n)
+{
+    fact[0] = inv_fact[0] = 1;
+    for (int i = 1; i <= n; ++i)
+        fact[i] = mod_mul(fact[i - 1], i);
+    inv_fact[n] = mod_inv(fact[n]);
+    for (int i = n - 1; i >= 1; --i)
+        inv_fact[i] = mod_mul(inv_fact[i + 1], i + 1);
+}
+
+ll nCr(int n, int r)
+{
+    if (r < 0 || r > n)
+        return 0;
+    return mod_mul(fact[n], mod_mul(inv_fact[r], inv_fact[n - r]));
+}
+
+// Sieve of Eratosthenes (0-based)
+vi sieve(int n)
+{
+    vi is_prime(n + 1, 1);
+    is_prime[0] = is_prime[1] = 0;
+    for (int i = 2; i * i <= n; ++i)
+        if (is_prime[i])
+            for (int j = i * i; j <= n; j += i)
+                is_prime[j] = 0;
+    return is_prime;
+}
+
+// Prime factorization in O(sqrt(n))
+vl prime_factors(ll n)
+{
+    vl factors;
+    for (ll i = 2; i * i <= n; ++i)
+    {
+        while (n % i == 0)
+        {
+            factors.pb(i);
+            n /= i;
+        }
+    }
+    if (n > 1)
+        factors.pb(n);
+    return factors;
+}
+
+// Binary exponentiation for power (a^b)
+ll binpow(ll a, ll b)
+{
+    ll res = 1;
+    while (b)
+    {
+        if (b & 1)
+            res *= a;
+        a *= a;
+        b >>= 1;
+    }
+    return res;
+}
+
+// Sum of first N natural numbers
+ll sum_n(ll n) { return n * (n + 1) / 2; }
+// Sum of squares 1^2 + 2^2 + ... + n^2
+ll sum_n2(ll n) { return n * (n + 1) * (2 * n + 1) / 6; }
+// Sum of cubes: (1 + 2 + ... + n)^2
+ll sum_n3(ll n)
+{
+    ll s = sum_n(n);
+    return s * s;
+}
+
 namespace CPUtils
 {
     struct SegmentTree
@@ -479,11 +643,20 @@ void solve()
 int main()
 {
     fastio();
+#ifdef LOCALCLK
+    clock_t start = clock();
+#endif
+
     int t = 1;
     cin >> t;
     while (t--)
     {
         solve();
     }
+
+#ifdef LOCALCLK
+    cerr << "\n[Execution Time]: " << fixed << setprecision(3)
+         << 1000.0 * (clock() - start) / CLOCKS_PER_SEC << " ms\n";
+#endif
     return 0;
 }
