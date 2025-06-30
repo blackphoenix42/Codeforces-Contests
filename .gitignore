@@ -21,3 +21,10 @@ Thumbs.db
 *.exe
 *.out
 #.cph/
+*.aux
+*.fls
+*.fdb_latexmk
+*.tex
+*.synctex.gz
+abc.*
+Resume.*

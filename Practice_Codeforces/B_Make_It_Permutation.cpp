@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  blackphoenix42
- *    Created: 2025-06-27 23:18:59
+ *    Created: 2025-06-29 19:48:43
  *    Profile: https://codeforces.com/profile/blackphoenix42
  **/
 
@@ -541,16 +541,7 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {
-    int n;
-    cin >> n;
-    cout << 2 * n - 1 << "\n";
-    for (int i = 1; i < n; i++) {
-        cout << i << " " << 1 << " " << i << "\n";
-        cout << i << " " << i + 1 << " " << n << "\n";
-    }
-    cout << n << " 1 " << n << "\n";
-}
+void solve() {}
 
 int main() {
     fastio();
