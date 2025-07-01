@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-01 20:06:34
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -71,7 +71,6 @@ using u128 = __uint128_t;
 #define nl '\n'
 #define el cout << '\n'
 #define print(x) cout << (x) << '\n'
-#define print1(x) cout << (x) << ' '
 #define flush cout << endl << flush
 #define umap unordered_map
 #define uset unordered_set
@@ -542,7 +541,15 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    if (n % 4 != 0) {
+        print("Alice");
+    } else {
+        print("Bob");
+    }
+}
 
 int main() {
     fastio();

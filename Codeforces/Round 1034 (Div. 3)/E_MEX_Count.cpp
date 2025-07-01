@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-01 20:49:37
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -542,7 +542,28 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vl a(n);
+    READVEC(a);
+    freq(a);
+    vl prefixSum(n + 3, 0);
+    bool pres = true;
+    FOR(i, 0, n + 1) {
+        if (!pres) break;
+        if (freq[i] <= n - i) {
+            prefixSum[freq[i]]++;
+            prefixSum[n - i + 1]--;
+        }
+        if (freq[i] == 0) pres = false;
+    }
+    ll mex = 0;
+    FOR(i, 0, n + 1) {
+        mex += prefixSum[i];
+        print1(mex);
+    }
+}
 
 int main() {
     fastio();
@@ -554,6 +575,7 @@ int main() {
     cin >> t;
     while (t--) {
         solve();
+        el;
     }
 
 #ifdef LOCALCLK

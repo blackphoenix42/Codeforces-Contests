@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-01 21:27:12
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -542,7 +542,47 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+vi get_primes(int n) {
+    vi is_prime(n + 1, 1), primes;
+    is_prime[0] = is_prime[1] = 0;
+    FOR(i, 2, n + 1) {
+        if (is_prime[i]) {
+            primes.pb(i);
+            FOREQ(j, i * 2, n) is_prime[j] = 0;
+        }
+    }
+    REVERSE(primes);
+    return primes;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+
+    vi perm(n + 1, 0), vis(n + 1, 0), arrPrimes = get_primes(n);
+
+    EACH(pr, arrPrimes) {
+        vi cycle;
+        for (int x = pr; x <= n; x += pr) {
+            if (!vis[x]) cycle.pb(x);
+        }
+        int len = sz(cycle);
+        if (len > 1) {
+            FOR(i, 0, len - 1) {
+                perm[cycle[i]] = cycle[i + 1];
+                vis[cycle[i]] = 1;
+            }
+            perm[cycle[len - 1]] = cycle[0];
+            vis[cycle[len - 1]] = 1;
+        }
+    }
+
+    FORN(i, 1, n) {
+        if (!perm[i]) perm[i] = i;
+        print1(perm[i]);
+    }
+    el;
+}
 
 int main() {
     fastio();

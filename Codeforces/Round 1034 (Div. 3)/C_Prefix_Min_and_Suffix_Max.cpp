@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-01 20:32:06
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -71,7 +71,6 @@ using u128 = __uint128_t;
 #define nl '\n'
 #define el cout << '\n'
 #define print(x) cout << (x) << '\n'
-#define print1(x) cout << (x) << ' '
 #define flush cout << endl << flush
 #define umap unordered_map
 #define uset unordered_set
@@ -542,7 +541,28 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vi a(n);
+    READVEC(a);
+
+    vi pre_min(n), suf_max(n);
+    pre_min[0] = a[0];
+    FOR(i, 1, n) { pre_min[i] = min(a[i], pre_min[i - 1]); }
+    suf_max[n - 1] = a[n - 1];
+    FORD(i, n - 2, 0) { suf_max[i] = max(a[i], suf_max[i + 1]); }
+
+    string res = "";
+    FOR(i, 0, n) {
+        if (a[i] == pre_min[i] or a[i] == suf_max[i]) {
+            res += '1';
+        } else {
+            res += '0';
+        }
+    }
+    print(res);
+}
 
 int main() {
     fastio();

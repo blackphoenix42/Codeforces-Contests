@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-01 21:45:20
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -452,45 +452,62 @@ ll sum_n3(ll n) {
 
 namespace CPUtils {
 struct SegmentTree {
-    int n;
-    vector<ll> tree;
+    int size, modGcd;
+    vi *data;
+    vector<tuple<ll, ll, int, int>> tree;  // (maxVal, transitions, first, last)
 
-    SegmentTree(int _n) : n(_n), tree(4 * _n, 0) {}
+    SegmentTree(int _n, int _g, vi &_a)
+        : size(_n), modGcd(_g), data(&_a), tree(4 * _n + 4) {
+        build(1, 1, size);
+    }
 
-    void build(const vector<ll> &a, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (tl == tr) {
-            tree[v] = a[tl];
+    tuple<ll, ll, int, int> merge(const tuple<ll, ll, int, int> &left,
+                                  const tuple<ll, ll, int, int> &right) {
+        auto [lmax, ltr, lf, l] = left;
+        auto [rmax, rtr, rf, rl] = right;
+        ll midTrans = (l > rf);
+        ll totalTrans = ltr + midTrans + rtr;
+        ll totalMax = max(lmax, modGcd * (ltr + midTrans) + rmax);
+        return {totalMax, totalTrans, lf, rl};
+    }
+
+    void build(int node, int l, int r) {
+        if (l == r) {
+            int val = (*data)[l] % modGcd;
+            tree[node] = {1LL * val, 0, val, val};
         } else {
-            int tm = (tl + tr) / 2;
-            build(a, v * 2, tl, tm);
-            build(a, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+            int mid = (l + r) / 2;
+            build(node * 2, l, mid);
+            build(node * 2 + 1, mid + 1, r);
+            tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);
         }
     }
 
-    void update(int pos, ll val, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (tl == tr) {
-            tree[v] = val;
+    void update(int pos, int node = 1, int l = 1, int r = -1) {
+        if (r == -1) r = size;
+        if (l == r) {
+            int val = (*data)[pos] % modGcd;
+            tree[node] = {1LL * val, 0, val, val};
         } else {
-            int tm = (tl + tr) / 2;
-            if (pos <= tm)
-                update(pos, val, v * 2, tl, tm);
+            int mid = (l + r) / 2;
+            if (pos <= mid)
+                update(pos, node * 2, l, mid);
             else
-                update(pos, val, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+                update(pos, node * 2 + 1, mid + 1, r);
+            tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);
         }
     }
 
-    ll query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (l > r) return 0;
-        if (l == tl && r == tr) return tree[v];
-        int tm = (tl + tr) / 2;
-        return query(l, min(r, tm), v * 2, tl, tm) +
-               query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
-    }
+    ll queryMaxVal() { return get<0>(tree[1]); }
+
+    // ll query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
+    //     if (tr == -1) tr = n - 1;
+    //     if (l > r) return 0;
+    //     if (l == tl && r == tr) return tree[v];
+    //     int tm = (tl + tr) / 2;
+    //     return query(l, min(r, tm), v * 2, tl, tm) +
+    //            query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
+    // }
 
     ~SegmentTree() = default;
 };
@@ -542,7 +559,54 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+vi originalArray;
+int arraySize, mod1;
+
+struct Instruction {
+    int type, param1, param2;
+};
+void solve() {
+    int queryCount;
+    cin >> arraySize >> mod1 >> queryCount;
+    vi input(arraySize + 1);
+    FOR(i, 1, arraySize + 1) cin >> input[i];
+
+    vector<Instruction> instructions(queryCount);
+    map<int, vi> gcdGroups;
+    vi checkQueries;
+
+    REP(i, queryCount) {
+        cin >> instructions[i].type >> instructions[i].param1;
+        if (instructions[i].type == 1)
+            cin >> instructions[i].param2;
+        else {
+            int g = gcd(instructions[i].param1, mod1);
+            gcdGroups[g].pb(i);
+            checkQueries.pb(i);
+        }
+    }
+
+    vector<bool> isSorted(queryCount);
+
+    for (auto &[g, indices] : gcdGroups) {
+        if (indices.empty()) continue;
+        originalArray = input;
+        CPUtils::SegmentTree segTree(arraySize, g, originalArray);
+        int k = 0;
+        REP(i, queryCount) {
+            if (instructions[i].type == 1) {
+                originalArray[instructions[i].param1] = instructions[i].param2;
+                segTree.update(instructions[i].param1);
+            } else if (k < sz(indices) && i == indices[k]) {
+                isSorted[i] = (arraySize == 0 || segTree.queryMaxVal() < mod1);
+                k++;
+            }
+        }
+    }
+
+    SORT(checkQueries);
+    for (int idx : checkQueries) isSorted[idx] ? YES : NO;
+}
 
 int main() {
     fastio();
