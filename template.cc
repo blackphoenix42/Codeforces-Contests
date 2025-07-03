@@ -25,14 +25,27 @@ using vs = vector<string>;
 using vvs = vector<vector<string>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
+using vll = vector<vl>;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vpii = vector<pii>;
 using vpll = vector<pll>;
+using qs = queue<string>;
+using ql = queue<ll>;
+using qi = queue<int>;
+using qpii = queue<pii>;
+using qpll = queue<pll>;
+using sts = stack<string>;
+using stl = stack<ll>;
+using sti = stack<int>;
+using stpii = stack<pii>;
+using stpll = stack<pll>;
 using i128 = __int128_t;
 using u128 = __uint128_t;
 
 // Macros
+#define umap unordered_map
+#define uset unordered_set
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -73,8 +86,6 @@ using u128 = __uint128_t;
 #define print(x) cout << (x) << '\n'
 #define print1(x) cout << (x) << ' '
 #define flush cout << endl << flush
-#define umap unordered_map
-#define uset unordered_set
 #define freq(v)       \
     map<ll, ll> freq; \
     for (auto x : v) freq[x]++;
