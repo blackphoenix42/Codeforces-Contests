@@ -330,7 +330,7 @@ ll ceil_div(ll a, ll b) { return (a + b - 1) / b; }
 bool is_power_of_two(ll x) { return x && !(x & (x - 1)); }
 int digit_sum(ll x) {
     int sum = 0;
-    while (x) sum += x % 10, x /= 10;
+    while (x) sum += (int)x % 10, x /= 10;
     return sum;
 }
 int digit_count(ll x) {
@@ -346,7 +346,7 @@ vi prefix_sum(const vi &a) {
 }
 
 vvi prefix_sum_2d(const vvi &grid) {
-    int n = grid.size(), m = grid[0].size();
+    int n = sz(grid), m = sz(grid[0]);
     vvi ps(n + 1, vi(m + 1));
     for (int i = 1; i <= n; ++i)
         for (int j = 1; j <= m; ++j)
