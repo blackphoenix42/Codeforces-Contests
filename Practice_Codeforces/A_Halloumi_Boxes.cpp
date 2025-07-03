@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created: 2025-07-03 20:58:50
+ *    Created: 2025-07-03 20:47:15
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -553,6 +553,29 @@ struct DSU {
 };
 }  // namespace CPUtils
 
+void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    vl arr(n);
+    bool flag = true;
+    FOR(i, 0, n) {
+        cin >> arr[i];
+        if (i != 0 && arr[i] < arr[i - 1]) {
+            flag = false;
+        }
+    }
+
+    if (flag) {
+        YES;
+        return;
+    }
+
+    if (k <= 1)
+        NO;
+    else
+        YES;
+}
 
 int main() {
     fastio();
@@ -562,14 +585,9 @@ int main() {
 
     int t = 1;
     cin >> t;
-    int x = 0;
     while (t--) {
-        string s;
-        cin >> s;
-        if(s[1] == '+') x++;
-        else x--;
+        solve();
     }
-    print(x);
 
 #ifdef LOCALCLK
     cerr << "\n[Execution Time]: " << fixed << setprecision(3)
