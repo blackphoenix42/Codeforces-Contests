@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-05 18:46:02
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -23,8 +23,6 @@ using pss = pair<string, string>;
 using pll = pair<ll, ll>;
 using vs = vector<string>;
 using vvs = vector<vector<string>>;
-using vc = vector<char>;
-using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
 using vll = vector<vl>;
@@ -555,7 +553,24 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vector<char> cells(n);
+    READVEC(cells);
+
+    int empty = 0;
+    for (int i = 0; i < n; i++) {
+        if (cells[i] == '.') empty++;
+        if (i < n && i + 1 < n && i + 2 < n) {
+            if (cells[i] == '.' && cells[i + 1] == '.' && cells[i + 2] == '.') {
+                print(2);
+                return;
+            }
+        }
+    }
+    print(empty);
+}
 
 int main() {
     fastio();
