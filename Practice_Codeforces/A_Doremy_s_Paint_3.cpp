@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-07 20:56:07
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -46,8 +46,8 @@ using i128 = __int128_t;
 using u128 = __uint128_t;
 
 // Macros
-#define umap1 unordered_map
-#define uset1 unordered_set
+#define umap unordered_map
+#define uset unordered_set
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -555,7 +555,33 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vi arr(n);
+    umap<int, int> um;
+    for (auto &x : arr) {
+        cin >> x;
+        um[x]++;
+    }
+    if (n == 2) {
+        YES;
+        return;
+    }
+    size_t x = um.size();
+    if (x == 1)
+        YES;
+    else if (x == 2) {
+        for (auto [i, j] : um) {
+            if (j == n / 2) {
+                YES;
+                return;
+            }
+        }
+        NO;
+    } else
+        NO;
+}
 
 int main() {
     fastio();
