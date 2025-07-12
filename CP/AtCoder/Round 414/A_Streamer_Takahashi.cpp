@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-12 17:30:23
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -560,7 +555,19 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int N, L, R;
+    cin >> N >> L >> R;
+    int cnt = 0;
+    for (int i = 0; i < N; i++) {
+        int X, Y;
+        cin >> X >> Y;
+        if (X <= L && Y >= R) {
+            cnt++;
+        }
+    }
+    print(cnt);
+}
 
 int main() {
     fastio();
@@ -568,11 +575,7 @@ int main() {
     clock_t start = clock();
 #endif
 
-    int t = 1;
-    cin >> t;
-    while (t--) {
-        solve();
-    }
+    solve();
 
 #ifdef LOCALCLK
     cerr << "\n[Execution Time]: " << fixed << setprecision(3)

@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -560,7 +555,36 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int N;
+    cin >> N;
+    __int128 total = 0;
+    vector<pair<char, ll>> runs;
+    runs.reserve(N);
+
+    for (int i = 0; i < N; i++) {
+        char c;
+        ll len;
+        cin >> c >> len;
+        total += len;
+        runs.emplace_back(c, len);
+    }
+
+    if (total > 100) {
+        print("Too Long");
+        return;
+    }
+
+    string S;
+    S.reserve((size_t)total);
+    for (auto &pr : runs) {
+        char c = pr.first;
+        ll len = pr.second;
+        S.append((size_t)len, c);
+    }
+
+    print(S);
+}
 
 int main() {
     fastio();
@@ -569,7 +593,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }

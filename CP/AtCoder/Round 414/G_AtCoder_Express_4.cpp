@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-12 17:50:39
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -305,7 +305,7 @@ const int MOD = 998244353;
 const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
-const ll INF = 1e18;
+const ll INF = (ll)4e18;
 const ll INF_INT = 1e9;
 const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -470,47 +465,35 @@ ll sum_n3(ll n) {
 
 namespace CPUtils {
 struct SegmentTree {
-    int n;
-    vector<ll> tree;
+    int n, base;
+    vector<vector<pair<int, ll>>> &G;
+    bool up;
 
-    SegmentTree(int _n) : n(_n), tree(4 * _n, 0) {}
-
-    void build(const vector<ll> &a, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (tl == tr) {
-            tree[v] = a[tl];
-        } else {
-            int tm = (tl + tr) / 2;
-            build(a, v * 2, tl, tm);
-            build(a, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+    SegmentTree(int _n, vector<vector<pair<int, ll>>> &G_, bool _up)
+        : G(G_), up(_up) {
+        n = 1 << (32 - __builtin_clz(_n - 1));
+        base = G.size();
+        G.resize(base + 2 * n);
+        for (int i = 1; i < n; ++i) {
+            int left = base + (i << 1);
+            int right = left + 1;
+            int parent = base + i;
+            if (up) {
+                G[left].emplace_back(parent, 0);
+                G[right].emplace_back(parent, 0);
+            } else {
+                G[parent].emplace_back(left, 0);
+                G[parent].emplace_back(right, 0);
+            }
         }
     }
 
-    void update(int pos, ll val, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (tl == tr) {
-            tree[v] = val;
-        } else {
-            int tm = (tl + tr) / 2;
-            if (pos <= tm)
-                update(pos, val, v * 2, tl, tm);
-            else
-                update(pos, val, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+    void collect(int l, int r, vector<int> &out) {
+        for (l += n, r += n; l <= r; l >>= 1, r >>= 1) {
+            if (l & 1) out.push_back(base + (l++));
+            if (!(r & 1)) out.push_back(base + (r--));
         }
     }
-
-    ll query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (l > r) return 0;
-        if (l == tl && r == tr) return tree[v];
-        int tm = (tl + tr) / 2;
-        return query(l, min(r, tm), v * 2, tl, tm) +
-               query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
-    }
-
-    ~SegmentTree() = default;
 };
 struct FenwickTree {
     int n;
@@ -560,7 +543,93 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int N, M;
+    cin >> N >> M;
+    vector<ll> x(N);
+    for (int i = 0; i < N; i++) cin >> x[i];
+
+    vector<vector<pair<int, ll>>> G;
+    G.reserve(N + 8 * (1 << (32 - __builtin_clz(N - 1))) + 2 * M);
+    G.resize(N);
+
+    CPUtils::SegmentTree boardE(N, G, true);
+    CPUtils::SegmentTree alightE(N, G, false);
+    CPUtils::SegmentTree boardW(N, G, true);
+    CPUtils::SegmentTree alightW(N, G, false);
+
+    for (int u = 0; u < N; u++) {
+        G[u].emplace_back(boardE.base + boardE.n + u, -x[u]);
+        G[u].emplace_back(boardW.base + boardW.n + u, +x[u]);
+    }
+    for (int u = 0; u < N; u++) {
+        G[alightE.base + alightE.n + u].emplace_back(u, +x[u]);
+        G[alightW.base + alightW.n + u].emplace_back(u, -x[u]);
+    }
+
+    int trainBase = G.size();
+    G.resize(trainBase + 2 * M);
+
+    for (int i = 0; i < M; i++) {
+        int l, r, L, R;
+        ll c;
+        cin >> l >> r >> L >> R >> c;
+        --l;
+        --r;
+        --L;
+        --R;
+        int inID = trainBase + i * 2;
+        int outID = inID + 1;
+
+        G[inID].emplace_back(outID, c);
+
+        if (r < L) {
+            vector<int> segs;
+            boardE.collect(l, r, segs);
+            for (int v : segs) G[v].emplace_back(inID, 0);
+            segs.clear();
+            alightE.collect(L, R, segs);
+            for (int v : segs) G[outID].emplace_back(v, 0);
+        } else {
+            vector<int> segs;
+            boardW.collect(l, r, segs);
+            for (int v : segs) G[v].emplace_back(inID, 0);
+            segs.clear();
+            alightW.collect(L, R, segs);
+            for (int v : segs) G[outID].emplace_back(v, 0);
+        }
+    }
+
+    int V = G.size();
+    vector<ll> dist(V, INF);
+    using pli = pair<ll, int>;
+    priority_queue<pli, vector<pli>, greater<pli>> pq;
+    dist[0] = 0;
+    pq.emplace(0, 0);
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d > dist[u]) continue;
+        for (auto &e : G[u]) {
+            int v = e.first;
+            ll w = e.second;
+            ll nd = d + w;
+            if (nd < dist[v]) {
+                dist[v] = nd;
+                pq.emplace(nd, v);
+            }
+        }
+    }
+
+    ostringstream out;
+    for (int k = 1; k < N; k++) {
+        ll ans = dist[k];
+        if (ans >= INF / 2) ans = -1;
+        out << ans << (k + 1 < N ? ' ' : '\n');
+    }
+    cout << out.str();
+}
 
 int main() {
     fastio();
@@ -569,7 +638,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }

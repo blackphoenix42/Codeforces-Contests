@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-12 17:38:34
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -560,7 +555,65 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int N, K;
+    cin >> N >> K;
+
+    vector<vector<int>> adj(N);
+    for (int i = 0; i < N - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    int S = N * K;
+    vector<int> dist(S, INF_INT), prevNode(S, -1);
+    deque<int> dq;
+
+    auto ID = [&](int u, int r) { return u * K + r; };
+
+    dist[ID(0, 0)] = 0;
+    dq.push_back(ID(0, 0));
+
+    while (!dq.empty()) {
+        int s = dq.front();
+        dq.pop_front();
+        int d = dist[s];
+        int u = s / K, r = s % K;
+        int p = prevNode[s];
+
+        if (r + 1 < K) {
+            for (int v : adj[u]) {
+                if (v == p) continue;
+                int ns = ID(v, r + 1);
+                if (dist[ns] > d) {
+                    dist[ns] = d;
+                    prevNode[ns] = u;
+                    dq.push_front(ns);
+                }
+            }
+        } else {
+            for (int v : adj[u]) {
+                if (v == p) continue;
+                int ns = ID(v, 0);
+                if (dist[ns] > d + 1) {
+                    dist[ns] = d + 1;
+                    prevNode[ns] = -1;
+                    dq.push_back(ns);
+                }
+            }
+        }
+    }
+
+    for (int u = 1; u < N; u++) {
+        int ans = dist[ID(u, 0)];
+        if (ans == INF_INT) ans = -1;
+        cout << ans << (u + 1 < N ? ' ' : '\n');
+    }
+}
 
 int main() {
     fastio();

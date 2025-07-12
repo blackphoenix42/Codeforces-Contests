@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-12 17:32:39
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -560,7 +555,57 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+bool is_pal_base(ll x, int base) {
+    vector<int> d;
+    while (x > 0) {
+        d.push_back(x % base);
+        x /= base;
+    }
+    int i = 0, j = (int)d.size() - 1;
+    while (i < j) {
+        if (d[i++] != d[j--]) return false;
+    }
+    return true;
+}
+
+ll make_pal(ll p, int len) {
+    ll x = p;
+    ll t = p;
+    if (len & 1) t /= 10;
+    while (t > 0) {
+        x = x * 10 + (t % 10);
+        t /= 10;
+    }
+    return x;
+}
+
+void solve() {
+    int A;
+    ll N;
+    cin >> A >> N;
+
+    ll pow10[16];
+    pow10[0] = 1;
+    for (int i = 1; i < 16; i++) pow10[i] = pow10[i - 1] * 10LL;
+
+    int lenN = to_string(N).size();
+    __int128 sum = 0;
+
+    for (int len = 1; len <= lenN; len++) {
+        int half = (len + 1) / 2;
+        ll start = pow10[half - 1];
+        ll end = pow10[half] - 1;
+        for (ll p = start; p <= end; p++) {
+            ll x = make_pal(p, len);
+            if (x > N) break;
+            if (is_pal_base(x, A)) {
+                sum += x;
+            }
+        }
+    }
+
+    print((ll)sum);
+}
 
 int main() {
     fastio();
@@ -569,7 +614,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }

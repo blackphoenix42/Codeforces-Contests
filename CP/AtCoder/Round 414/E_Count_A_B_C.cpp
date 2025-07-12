@@ -1,7 +1,7 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created:
+ *    Created: 2025-07-12 17:37:39
  *    Profile: https://codeforces.com/profile/IndianTourist01
  **/
 
@@ -297,9 +297,9 @@ void debug_out(Head H, Tail... T) {
 // Constants
 #define USE_MOD1 1
 #if USE_MOD1
-const int MOD = 1e9 + 7;
-#else
 const int MOD = 998244353;
+#else
+const int MOD = 1e9 + 7;
 #endif
 // const int N = 2e5 + 5;
 const ll INFF = 1000000000000000005ll;
@@ -356,17 +356,12 @@ vvi prefix_sum_2d(const vvi &grid) {
                        ps[i - 1][j - 1];
     return ps;
 }
-int floor_lg(long long x) { return x <= 0 ? -1 : 63 - __builtin_clzll(x); }
 ll floor_sqrt(ll x) { return (ll)sqrtl(x); }
 ll ceil_sqrt(ll x) {
     ll r = (ll)ceil(sqrtl(x));
     while (r * r > x) --r;
     while ((r + 1) * (r + 1) <= x) ++r;
     return r;
-}
-template <class T1, class T2>
-T1 floor_div(T1 num, T2 den) {
-    return (num > 0 ? num / den : -((-num + den - 1) / den));
 }
 
 // -------------------- Math Utils --------------------
@@ -560,7 +555,26 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll N;
+    cin >> N;
+    ll inv2 = (MOD + 1) / 2;
+
+    ll sum_f = 0;
+    for (ll i = 1; i <= N;) {
+        ll q = N / i;
+        ll j = N / q;
+        ll cnt = (j - i + 1) % MOD;
+        sum_f = (sum_f + (q % MOD) * cnt) % MOD;
+        i = j + 1;
+    }
+
+    ll Nm = N % MOD;
+    ll total = (ll)((__int128)Nm * ((Nm + 1) % MOD) % MOD * inv2 % MOD);
+
+    ll ans = (total - sum_f + MOD) % MOD;
+    print(ans);
+}
 
 int main() {
     fastio();
@@ -569,7 +583,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }
