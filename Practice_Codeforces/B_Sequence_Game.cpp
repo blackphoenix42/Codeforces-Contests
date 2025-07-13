@@ -1,8 +1,13 @@
 /**
  *    Name:    Ayush Yadav
  *    Author:  IndianTourist01
- *    Created: 2025-07-13 13:57:36
+ *    Created: 2025-07-13 14:48:31
  *    Profile: https://codeforces.com/profile/IndianTourist01
+ *    Group: Codeforces - Codeforces Round 894 (Div. 3)
+ *    Problem Name: B. Sequence Game
+ *    Problem URL: https://codeforces.com/contest/1862/problem/B
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
