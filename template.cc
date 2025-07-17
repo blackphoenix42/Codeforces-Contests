@@ -1,8 +1,8 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
+ *    Author: BinaryPhoenix10
  *    Created:
- *    Profile: https://codeforces.com/profile/BinaryPhoenix42
+ *    Profile: https://codeforces.com/profile/BinaryPhoenix10
  *    Group:
  *    Problem Name:
  *    Problem URL:
