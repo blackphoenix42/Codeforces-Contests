@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:22:38
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: F. 1-1-1, Free Tree!
+ *    Problem URL: https://codeforces.com/contest/2126/problem/F
+ *    Time Limit: 4000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -86,6 +86,7 @@ using u128 = __uint128_t;
 #define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
+#define rep(i, a, b) for (int i = (a); i < (b); ++i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -604,8 +605,101 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+const int B = 450;
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> col(n);
+    rep(i, 0, n) cin >> col[i];
 
-void solve() {}
+    vector<vector<pair<int, int>>> adj(n);
+    rep(i, 1, n) {
+        int u, v, c;
+        cin >> u >> v >> c;
+        --u;
+        --v;
+        adj[u].pb({v, c});
+        adj[v].pb({u, c});
+    }
+
+    vector<int> deg(n);
+    rep(i, 0, n) deg[i] = sz(adj[i]);
+    vector<int> heavyId(n, -1), heavy;
+    rep(i, 0, n) {
+        if (deg[i] > B) {
+            heavyId[i] = sz(heavy);
+            heavy.pb(i);
+        }
+    }
+    int H = sz(heavy);
+
+    vector<unordered_map<int, ll>> big(H);
+    rep(i, 0, H) {
+        int v = heavy[i];
+        for (auto &pr : adj[v]) {
+            big[i][col[pr.fi]] += pr.se;
+        }
+    }
+
+    vector<vector<pair<int, int>>> heavyNbr(n);
+    rep(u, 0, n) {
+        for (auto &pr : adj[u]) {
+            int v = pr.fi;
+            if (heavyId[v] != -1) {
+                heavyNbr[u].pb({heavyId[v], pr.se});
+            }
+        }
+    }
+
+    ll ans = 0;
+    rep(u, 0, n) {
+        for (auto &pr : adj[u]) {
+            int v = pr.fi;
+            if (u < v && col[u] != col[v]) ans += pr.se;
+        }
+    }
+
+    auto getSum = [&](int v, int c) -> ll {
+        if (heavyId[v] == -1) {
+            ll s = 0;
+            for (auto &pr : adj[v]) {
+                if (col[pr.fi] == c) s += pr.se;
+            }
+            return s;
+        } else {
+            auto &mp = big[heavyId[v]];
+            auto it = mp.find(c);
+            return it == mp.end() ? 0 : it->second;
+        }
+    };
+
+    auto notifyHeavy = [&](int v, int oldC, int newC) {
+        for (auto &pr : heavyNbr[v]) {
+            auto &mp = big[pr.fi];
+            mp[oldC] -= pr.se;
+            if (mp[oldC] == 0) mp.erase(oldC);
+            mp[newC] += pr.se;
+        }
+    };
+
+    while (q--) {
+        int v, x;
+        cin >> v >> x;
+        --v;
+        int oldC = col[v];
+        if (oldC == x) {
+            cout << ans << "\n";
+            continue;
+        }
+        ll So = getSum(v, oldC);
+        ll Sn = getSum(v, x);
+        ans += So - Sn;
+
+        notifyHeavy(v, oldC, x);
+        col[v] = x;
+        cout << ans << "\n";
+    }
+}
 
 int main() {
     fastio();

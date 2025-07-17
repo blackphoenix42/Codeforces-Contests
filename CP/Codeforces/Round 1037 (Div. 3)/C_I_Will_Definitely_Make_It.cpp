@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:09:39
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: C. I Will Definitely Make It
+ *    Problem URL: https://codeforces.com/contest/2126/problem/C
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -604,8 +604,35 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+bool is_reachable(int current_h, const vi &vals) {
+    int pos = lb(all(vals), current_h) - vals.begin();
+    for (int i = pos; i + 1 < (int)vals.size(); ++i) {
+        if (vals[i + 1] - vals[i] > current_h) return false;
+    }
+    return true;
+}
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vi heights(n);
+    READVEC(heights);
 
-void solve() {}
+    int origin = heights[k - 1];
+    int global_max = *max_element(all(heights));
+    if (origin == global_max) {
+        YES;
+        return;
+    }
+
+    vi compressed = heights;
+    SORT(compressed);
+    UNIQUE(compressed);
+
+    if (is_reachable(origin, compressed))
+        YES;
+    else
+        NO;
+}
 
 int main() {
     fastio();

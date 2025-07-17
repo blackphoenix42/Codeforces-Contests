@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:12:30
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: D. This Is the Last Time
+ *    Problem URL: https://codeforces.com/contest/2126/problem/D
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -604,8 +604,80 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
-
-void solve() {}
+#define lc(u) ((u) << 1)
+#define rc(u) ((u) << 1 | 1)
+#define MID(l, r) (((l) + (r)) >> 1)
+void solve() {
+    int n;
+    ll k;
+    cin >> n >> k;
+    vector<ll> L(n), R(n), V(n);
+    vector<ll> xs;
+    xs.reserve(3 * n + 1);
+    xs.push_back(k);
+    for (int i = 0; i < n; i++) {
+        cin >> L[i] >> R[i] >> V[i];
+        xs.push_back(L[i]);
+        xs.push_back(R[i]);
+        xs.push_back(V[i]);
+    }
+    sort(all(xs));
+    xs.erase(unique(all(xs)), xs.end());
+    int M = xs.size();
+    auto getId = [&](ll v) {
+        return int(lower_bound(all(xs), v) - xs.begin());
+    };
+    vector<vector<int>> seg(4 * M);
+    function<void(int, int, int, int, int, int)> addInterval =
+        [&](int node, int l, int r, int ql, int qr, int idx) {
+            if (ql > r || qr < l) return;
+            if (ql <= l && r <= qr) {
+                seg[node].push_back(idx);
+                return;
+            }
+            int m = MID(l, r);
+            addInterval(lc(node), l, m, ql, qr, idx);
+            addInterval(rc(node), m + 1, r, ql, qr, idx);
+        };
+    for (int i = 0; i < n; i++) {
+        int li = getId(L[i]);
+        int ri = getId(R[i]);
+        addInterval(1, 0, M - 1, li, ri, i);
+    }
+    vector<char> visValue(M, 0), visInterval(n, 0);
+    queue<int> q;
+    int start = getId(k);
+    visValue[start] = 1;
+    q.push(start);
+    ll answer = k;
+    function<void(int, int, int, int)> collect = [&](int node, int l, int r,
+                                                     int pos) {
+        for (int idx : seg[node]) {
+            if (!visInterval[idx]) {
+                visInterval[idx] = 1;
+                int nid = getId(V[idx]);
+                if (!visValue[nid]) {
+                    visValue[nid] = 1;
+                    q.push(nid);
+                    answer = max(answer, xs[nid]);
+                }
+            }
+        }
+        seg[node].clear();
+        if (l == r) return;
+        int m = MID(l, r);
+        if (pos <= m)
+            collect(lc(node), l, m, pos);
+        else
+            collect(rc(node), m + 1, r, pos);
+    };
+    while (!q.empty()) {
+        int pos = q.front();
+        q.pop();
+        collect(1, 0, M - 1, pos);
+    }
+    cout << answer << "\n";
+}
 
 int main() {
     fastio();

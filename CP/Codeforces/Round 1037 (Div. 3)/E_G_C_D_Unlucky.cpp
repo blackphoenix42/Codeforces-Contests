@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:15:45
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: E. G-C-D, Unlucky!
+ *    Problem URL: https://codeforces.com/contest/2126/problem/E
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -35,7 +35,7 @@ using vc = vector<char>;
 using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
-using vll = vector<vl>;
+using vll = vector<ll>;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vpii = vector<pii>;
@@ -86,6 +86,7 @@ using u128 = __uint128_t;
 #define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
+#define rep(i, l, r) for (int i = (l); i <= (r); ++i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -604,8 +605,42 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+ll gcdll(ll a, ll b) {
+    while (b) {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
 
-void solve() {}
+bool existsArray(int n, const vll &p, const vll &s) {
+    if (n == 1) {
+        return p[0] == s[0];
+    }
+    rep(i, 1, n - 1) {
+        if (p[i - 1] % p[i] != 0) return false;
+        if (s[i] % s[i - 1] != 0) return false;
+    }
+    if (p[n - 1] != s[0]) return false;
+    if (gcdll(p[0], s[1]) != s[0]) return false;
+    rep(i, 1, n - 2) {
+        ll pi = p[i], si = s[i];
+        ll g = gcdll(pi, si);
+        ll L = (pi / g) * si;
+        if (gcdll(p[i - 1], L) != pi) return false;
+        if (gcdll(L, s[i + 1]) != si) return false;
+    }
+    if (gcdll(p[n - 2], s[n - 1]) != p[n - 1]) return false;
+    return true;
+}
+void solve() {
+    int n;
+    cin >> n;
+    vll p(n), s(n);
+    rep(i, 0, n - 1) cin >> p[i];
+    rep(i, 0, n - 1) cin >> s[i];
+    cout << (existsArray(n, p, s) ? "Yes\n" : "No\n");
+}
 
 int main() {
     fastio();

@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:25:19
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: G2. Big Wins! (hard version)
+ *    Problem URL: https://codeforces.com/contest/2126/problem/G2
+ *    Time Limit: 4000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -412,7 +412,7 @@ ll mod_inv_general(ll a, ll m) {
 }
 
 // nCr % MOD using Fermat's Little Theorem (MOD must be prime)
-const int MAXN = 2e5 + 5;
+static const int MAXN = 200000;
 #ifndef ONLINE_JUDGE
 ll fact[MAXN], inv_fact[MAXN];
 #else
@@ -514,45 +514,63 @@ template <typename K>
 using safe_uset = unordered_set<K, CustomHash>;
 
 namespace CPUtils {
+
+struct PrefixNode {
+    int sum, min_pref, max_pref;
+    PrefixNode(int s = 0, int mi = INF_INT, int ma = -INF_INT)
+        : sum(s), min_pref(mi), max_pref(ma) {}
+};
+
 struct SegmentTree {
     int n;
-    vector<ll> tree;
+    vector<PrefixNode> tree;
 
-    SegmentTree(int _n) : n(_n), tree(4 * _n, 0) {}
+    SegmentTree(int _n) : n(_n), tree(4 * _n) {}
 
-    void build(const vector<ll> &a, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
+    PrefixNode merge(const PrefixNode &L, const PrefixNode &R) const {
+        int s = L.sum + R.sum;
+        int minp = min(L.min_pref, L.sum + R.min_pref);
+        int maxp = max(L.max_pref, L.sum + R.max_pref);
+        return PrefixNode(s, minp, maxp);
+    }
+
+    void build(int v = 1, int tl = 1, int tr = -1) {
+        if (tr == -1) tr = n;
         if (tl == tr) {
-            tree[v] = a[tl];
+            tree[v] = PrefixNode(-1, -1, -1);
         } else {
-            int tm = (tl + tr) / 2;
-            build(a, v * 2, tl, tm);
-            build(a, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+            int tm = (tl + tr) >> 1;
+            build(v << 1, tl, tm);
+            build(v << 1 | 1, tm + 1, tr);
+            tree[v] = merge(tree[v << 1], tree[v << 1 | 1]);
         }
     }
 
-    void update(int pos, ll val, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
+    void update(int pos, int val, int v = 1, int tl = 1, int tr = -1) {
+        if (tr == -1) tr = n;
         if (tl == tr) {
-            tree[v] = val;
+            tree[v].sum += val;
+            tree[v].min_pref = tree[v].sum;
+            tree[v].max_pref = tree[v].sum;
         } else {
-            int tm = (tl + tr) / 2;
+            int tm = (tl + tr) >> 1;
             if (pos <= tm)
-                update(pos, val, v * 2, tl, tm);
+                update(pos, val, v << 1, tl, tm);
             else
-                update(pos, val, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+                update(pos, val, v << 1 | 1, tm + 1, tr);
+            tree[v] = merge(tree[v << 1], tree[v << 1 | 1]);
         }
     }
 
-    ll query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
-        if (l > r) return 0;
-        if (l == tl && r == tr) return tree[v];
-        int tm = (tl + tr) / 2;
-        return query(l, min(r, tm), v * 2, tl, tm) +
-               query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
+    PrefixNode query(int l, int r, int v = 1, int tl = 1, int tr = -1) const {
+        if (tr == -1) tr = n;
+        if (l > r || r < tl || tr < l) return PrefixNode(0, INF_INT, -INF_INT);
+        if (l <= tl && tr <= r) return tree[v];
+        int tm = (tl + tr) >> 1;
+        if (r <= tm) return query(l, r, v << 1, tl, tm);
+        if (l > tm) return query(l, r, v << 1 | 1, tm + 1, tr);
+        return merge(query(l, r, v << 1, tl, tm),
+                     query(l, r, v << 1 | 1, tm + 1, tr));
     }
 
     ~SegmentTree() = default;
@@ -603,9 +621,168 @@ struct DSU {
 
     ~DSU() = default;
 };
+struct MedianSet {
+    multiset<int> low, high;
+    int sz = 0;
+    void insert(int x) {
+        if (low.empty() || x <= *prev(low.end()))
+            low.insert(x);
+        else
+            high.insert(x);
+        ++sz;
+        int want = sz / 2 + 1;
+        if ((int)low.size() > want) {
+            auto it = prev(low.end());
+            high.insert(*it);
+            low.erase(it);
+        } else if ((int)low.size() < want) {
+            auto it = high.begin();
+            low.insert(*it);
+            high.erase(it);
+        }
+    }
+    void merge(MedianSet &other) {
+        for (int x : other.low) insert(x);
+        for (int x : other.high) insert(x);
+        other.low.clear();
+        other.high.clear();
+        other.sz = 0;
+    }
+    int median() const { return *prev(low.end()); }
+};
 }  // namespace CPUtils
 
-void solve() {}
+int n;
+int a[MAXN + 1];
+int Lc[MAXN + 1], Rc[MAXN + 1], par[MAXN + 1];
+CPUtils::MedianSet *stset[MAXN + 1];
+ll answer;
+int build_cartesian() {
+    vector<int> st;
+    for (int i = 1; i <= n; i++) {
+        Lc[i] = Rc[i] = par[i] = 0;
+    }
+    for (int i = 1; i <= n; i++) {
+        int last = 0;
+        while (!st.empty() && a[st.back()] > a[i]) {
+            last = st.back();
+            st.pop_back();
+        }
+        if (!st.empty()) {
+            par[i] = st.back();
+            Rc[st.back()] = i;
+        }
+        if (last) {
+            par[last] = i;
+            Lc[i] = last;
+        }
+        st.push_back(i);
+    }
+    for (int i = 1; i <= n; i++) {
+        if (par[i] == 0) return i;
+    }
+    return 1;
+}
+
+void dfs(int u) {
+    stset[u] = new CPUtils::MedianSet();
+    stset[u]->insert(a[u]);
+    if (Lc[u]) {
+        dfs(Lc[u]);
+        if (stset[u]->sz < stset[Lc[u]]->sz) swap(stset[u], stset[Lc[u]]);
+        stset[u]->merge(*stset[Lc[u]]);
+        delete stset[Lc[u]];
+        stset[Lc[u]] = nullptr;
+    }
+    if (Rc[u]) {
+        dfs(Rc[u]);
+        if (stset[u]->sz < stset[Rc[u]]->sz) swap(stset[u], stset[Rc[u]]);
+        stset[u]->merge(*stset[Rc[u]]);
+        delete stset[Rc[u]];
+        stset[Rc[u]] = nullptr;
+    }
+    int med = stset[u]->median();
+    answer = max(answer, ll(med) - ll(a[u]));
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    vi a(n + 1);
+    int maxv = 0;
+    FORN(i, 1, n) {
+        cin >> a[i];
+        maxv = max(maxv, a[i]);
+    }
+
+    vvi by_val(maxv + 2);
+    FORN(i, 1, n) by_val[a[i]].pb(i);
+
+    vi lo(n + 1, 1), hi(n + 1, maxv);
+    vi todo(n);
+    iota(all(todo), 1);
+    vvi buckets(maxv + 2);
+    vc vis(maxv + 2);
+    vi used;
+
+    CPUtils::SegmentTree st(n);
+
+    while (!todo.empty()) {
+        used.clear();
+        EACH(j, todo) {
+            if (lo[j] < hi[j]) {
+                int m = (lo[j] + hi[j] + 1) >> 1;
+                buckets[m].pb(j);
+                if (!vis[m]) {
+                    vis[m] = 1;
+                    used.pb(m);
+                }
+            }
+        }
+
+        if (used.empty()) break;
+        st.build();
+        int curm = maxv + 1;
+
+        FORD(m, maxv, 1) {
+            while (curm > m) {
+                --curm;
+                EACH(pos, by_val[curm]) st.update(pos, 2);
+            }
+
+            if (vis[m]) {
+                EACH(j, buckets[m]) {
+                    CPUtils::PrefixNode L = (j > 1)
+                                                ? st.query(1, j - 1)
+                                                : CPUtils::PrefixNode(0, 0, 0);
+                    CPUtils::PrefixNode R = st.query(j, n);
+                    int Pjm1 = L.sum;
+                    int Lmin = min(0, L.min_pref);
+                    int Rmax = Pjm1 + R.max_pref;
+                    if (Rmax >= Lmin)
+                        lo[j] = m;
+                    else
+                        hi[j] = m - 1;
+                }
+            }
+        }
+
+        EACH(m, used) {
+            buckets[m].clear();
+            vis[m] = 0;
+        }
+
+        vi nxt;
+        EACH(j, todo)
+        if (lo[j] < hi[j]) nxt.pb(j);
+        swap(todo, nxt);
+    }
+
+    ll ans = 0;
+    FORN(i, 1, n)
+    ans = max(ans, (ll)lo[i] - a[i]);
+    print(ans);
+}
 
 int main() {
     fastio();

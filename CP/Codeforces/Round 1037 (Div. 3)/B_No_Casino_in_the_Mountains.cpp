@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:07:41
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: B. No Casino in the Mountains
+ *    Problem URL: https://codeforces.com/contest/2126/problem/B
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -605,7 +605,26 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int &x : a) cin >> x;
+
+    ll ans = 0;
+    int len = 0;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] == 0) {
+            ++len;
+        } else {
+            ans += (len + 1) / (k + 1);
+            len = 0;
+        }
+    }
+    ans += (len + 1) / (k + 1);
+
+    cout << ans << nl;
+}
 
 int main() {
     fastio();

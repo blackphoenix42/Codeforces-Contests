@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:05:27
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: A. Only One Digit
+ *    Problem URL: https://codeforces.com/contest/2126/problem/0
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -605,7 +605,15 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    string x;
+    cin >> x;
+    char mn = '9';
+    for (char c : x) {
+        mn = min(mn, c);
+    }
+    cout << mn << nl;
+}
 
 int main() {
     fastio();

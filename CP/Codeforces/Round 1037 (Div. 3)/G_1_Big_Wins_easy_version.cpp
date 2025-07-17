@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
- *    Author: BinaryPhoenix42
- *    Created:
+ *    Author:  BinaryPhoenix42
+ *    Created: 2025-07-17 20:24:16
  *    Profile: https://codeforces.com/profile/BinaryPhoenix42
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 1037 (Div. 3)
+ *    Problem Name: G1. Big Wins! (easy version)
+ *    Problem URL: https://codeforces.com/contest/2126/problem/G1
+ *    Time Limit: 4000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -605,7 +605,57 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    int mn = INT_MAX, mx = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        mn = min(mn, a[i]);
+        mx = max(mx, a[i]);
+    }
+
+    int lo = 0, hi = mx - mn, ans = 0;
+
+    vector<int> p(n + 1), minPref(n + 1), maxSuf(n + 1);
+
+    auto feasible = [&](int D) {
+        for (int T = D + 1; T <= mx; T++) {
+            int thr = T - D;
+            p[0] = 0;
+            for (int i = 0; i < n; i++) {
+                p[i + 1] = p[i] + (a[i] >= T ? 1 : -1);
+            }
+            minPref[0] = p[0];
+            for (int i = 1; i <= n; i++) {
+                minPref[i] = min(minPref[i - 1], p[i]);
+            }
+            maxSuf[n] = p[n];
+            for (int i = n - 1; i >= 0; i--) {
+                maxSuf[i] = max(p[i], maxSuf[i + 1]);
+            }
+            for (int j = 0; j < n; j++) {
+                if (a[j] <= thr) {
+                    if (maxSuf[j + 1] - minPref[j] >= 0) return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    while (lo <= hi) {
+        int mid = (lo + hi) >> 1;
+        if (feasible(mid)) {
+            ans = mid;
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+
+    cout << ans << "\n";
+}
 
 int main() {
     fastio();
