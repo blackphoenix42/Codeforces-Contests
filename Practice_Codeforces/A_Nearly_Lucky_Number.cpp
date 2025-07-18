@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-18 22:19:24
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Beta Round 84 (Div. 2 Only)
+ *    Problem Name: A. Nearly Lucky Number
+ *    Problem URL: https://codeforces.com/problemset/problem/110/A
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -606,7 +606,25 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll n;
+    cin >> n;
+    int c = 0;
+    string s = to_string(n);
+    for (auto &ch : s) {
+        if (ch == '4' or ch == '7') c++;
+    }
+
+    string k = to_string(c);
+    for (auto &i : k) {
+        if (i != '4' and i != '7') {
+            NO;
+            return;
+        }
+    }
+
+    YES;
+}
 
 int main() {
     fastio();
@@ -615,7 +633,7 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) {
         solve();
     }
