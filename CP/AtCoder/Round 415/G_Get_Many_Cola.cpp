@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 17:39:59
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: AtCoder - Japan Registry Services (JPRS) Programming Contest 2025#2
+ *(AtCoder Beginner Contest 415) Problem Name: G - Get Many Cola Problem URL:
+ *https://atcoder.jp/contests/abc415/tasks/abc415_g Time Limit: 2000 ms Memory
+ *Limit: 1024 MB
  **/
 
 #include <bits/stdc++.h>
@@ -128,13 +127,12 @@ using u128 = __uint128_t;
 #define write_pair(p) cout << p.first << " " << p.second << '\n'
 
 // For TESTING
-#ifndef ONLINE_JUDGE
 inline void OPEN(string s) {
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
-}
 #endif
-
+}
 // Debugging
 #ifdef LOCAL
 #define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", debug_out(__VA_ARGS__)
@@ -610,7 +608,88 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll n;
+    int m;
+    cin >> n >> m;
+
+    vi A(m);
+    vl B(m);
+    rep(i, 0, m) { cin >> A[i] >> B[i]; }
+    int maxA = *max_element(all(A));
+
+    vl bestB(maxA + 1, -1);
+
+    for (int i = 0; i < m; i++) {
+        bestB[A[i]] = max(bestB[A[i]], B[i]);
+    }
+
+    struct Opt {
+        int a;
+        ll b, c;
+    };
+    vector<Opt> opts;
+    opts.reserve(maxA);
+    for (int i = 1; i <= maxA; i++) {
+        if (bestB[i] >= 1) {
+            ll b = bestB[i];
+            opts.push_back({i, b, ll(i) - b});
+        }
+    }
+    int T = 0;
+    for (auto &o : opts) T = max(T, o.a);
+
+    // ll bestB = B[0], bestD = A[0] - B[0];
+    int j = 0;
+    FOR(i, 1, (int)opts.size()) {
+        if (opts[i].b * opts[j].c > opts[j].b * opts[i].c) {
+            j = i;
+        }
+        // ll d = (ll)A[i] - B[i];
+        // ll lhs = (ll)B[i] * bestD;
+        // ll rhs = bestB * d;
+        // if (lhs > rhs || (lhs == rhs && d < bestD)) {
+        //     bestB = B[i];
+        //     bestD = d;
+        // }
+    }
+    ll bj = opts[j].b, cj = opts[j].c;
+    ll g = n;
+    ll extra = 0;
+    if (g >= T) {
+        ll k = (g - T) / cj;
+        extra += k * bj;
+        g -= k * cj;
+    }
+
+    int L = int(g) + 1;
+    vl dp(L, 0LL);
+    rep(e, 0, L) {
+        for (auto &o : opts) {
+            if (e >= o.a) {
+                dp[e] = max(dp[e], dp[e - o.c] + o.b);
+            }
+        }
+        // ll cur = 0;
+        // rep(i, 0, m) {
+        //     if (e >= A[i]) {
+        //         int d = A[i] - B[i];
+        //         cur = max(cur, dp[e - d] + B[i]);
+        //     }
+        // }
+        // dp[e] = cur;
+    }
+    extra += dp[g];
+    // ll ans;
+    // if (n <= L) {
+    //     ans = n + dp[n];
+    // } else {
+    //     ll t = (n - L + dj - 1) / dj;
+    //     ll e2 = n - t * dj;
+    //     ans = n + t * Bj + dp[e2];
+    // }
+    print(n + extra);
+}
 
 int main() {
     fastio();
@@ -619,7 +698,7 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) {
         solve();
     }

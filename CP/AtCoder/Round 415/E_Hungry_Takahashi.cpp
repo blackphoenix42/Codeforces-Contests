@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 17:39:49
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: AtCoder - Japan Registry Services (JPRS) Programming Contest 2025#2
+ *(AtCoder Beginner Contest 415) Problem Name: E - Hungry Takahashi Problem URL:
+ *https://atcoder.jp/contests/abc415/tasks/abc415_e Time Limit: 3000 ms Memory
+ *Limit: 1024 MB
  **/
 
 #include <bits/stdc++.h>
@@ -88,7 +87,6 @@ using u128 = __uint128_t;
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
 #define rep(i, a, b) for (int i = (a); i < (b); ++i)
-#define per(i, a, b) for (int i = (b) - 1; i >= (a); --i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -128,13 +126,12 @@ using u128 = __uint128_t;
 #define write_pair(p) cout << p.first << " " << p.second << '\n'
 
 // For TESTING
-#ifndef ONLINE_JUDGE
 inline void OPEN(string s) {
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
-}
 #endif
-
+}
 // Debugging
 #ifdef LOCAL
 #define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", debug_out(__VA_ARGS__)
@@ -610,7 +607,63 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int H, W;
+    cin >> H >> W;
+    vector<vector<ll>> A(H, vector<ll>(W));
+    rep(i, 0, H) rep(j, 0, W) cin >> A[i][j];
+
+    int K = H + W - 1;
+    vector<ll> P(K), prefP(K);
+    rep(i, 0, K) {
+        cin >> P[i];
+        prefP[i] = P[i] + (i ? prefP[i - 1] : 0);
+    }
+
+    vector<ll> dp(W), ndp(W);
+
+    auto can = [&](ll X) {
+        ll th0 = prefP[0] - X;
+        if (A[0][0] < th0) return false;
+        dp[0] = A[0][0];
+        rep(j, 1, W) {
+            ll k = j;
+            ll th = prefP[k] - X;
+            dp[j] = (dp[j - 1] == LLONG_MIN ? LLONG_MIN : dp[j - 1] + A[0][j]);
+            if (dp[j] < th) dp[j] = LLONG_MIN;
+        }
+        rep(i, 1, H) {
+            {
+                ll k = i;
+                ll th = prefP[k] - X;
+                ndp[0] = (dp[0] == LLONG_MIN ? LLONG_MIN : dp[0] + A[i][0]);
+                if (ndp[0] < th) ndp[0] = LLONG_MIN;
+            }
+            rep(j, 1, W) {
+                ll k = i + j;
+                ll th = prefP[k] - X;
+                ll best = max(dp[j], ndp[j - 1]);
+                ndp[j] = (best == LLONG_MIN ? LLONG_MIN : best + A[i][j]);
+                if (ndp[j] < th) ndp[j] = LLONG_MIN;
+            }
+            dp.swap(ndp);
+        }
+
+        return dp[W - 1] != LLONG_MIN;
+    };
+
+    ll lo = 0, hi = prefP.back(), ans = hi;
+    while (lo <= hi) {
+        ll mid = (lo + hi) >> 1;
+        if (can(mid)) {
+            ans = mid;
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    print(ans);
+}
 
 int main() {
     fastio();
@@ -619,7 +672,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }

@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 17:38:02
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: AtCoder - Japan Registry Services (JPRS) Programming Contest 2025#2
+ *(AtCoder Beginner Contest 415) Problem Name: D - Get Many Stickers Problem
+ *URL: https://atcoder.jp/contests/abc415/tasks/abc415_d Time Limit: 2000 ms
+ *    Memory Limit: 1024 MB
  **/
 
 #include <bits/stdc++.h>
@@ -88,7 +87,6 @@ using u128 = __uint128_t;
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
 #define rep(i, a, b) for (int i = (a); i < (b); ++i)
-#define per(i, a, b) for (int i = (b) - 1; i >= (a); --i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -128,13 +126,12 @@ using u128 = __uint128_t;
 #define write_pair(p) cout << p.first << " " << p.second << '\n'
 
 // For TESTING
-#ifndef ONLINE_JUDGE
 inline void OPEN(string s) {
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
-}
 #endif
-
+}
 // Debugging
 #ifdef LOCAL
 #define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", debug_out(__VA_ARGS__)
@@ -610,7 +607,44 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll N;
+    int M;
+    cin >> N >> M;
+    vpll ops(M);
+    rep(i, 0, M) { cin >> ops[i].first >> ops[i].second; }
+
+    ll E = N;
+    vpll cand;
+    cand.reserve(M);
+    for (auto &[A, B] : ops) {
+        if (A <= (ll)E) {
+            ll C = A - B;
+            cand.emplace_back(C, A);
+        }
+    }
+
+    if (cand.empty()) {
+        print(0);
+        return;
+    }
+
+    priority_queue<pll, vpll, greater<pll>> pq;
+    for (auto &p : cand) pq.push(p);
+
+    ll ans = 0;
+    while (!pq.empty()) {
+        auto [C, A] = pq.top();
+        if (E < A) {
+            pq.pop();
+            continue;
+        }
+        ll k = (E - A) / C + 1;
+        ans += k;
+        E -= k * C;
+    }
+    print((ll)ans);
+}
 
 int main() {
     fastio();
@@ -619,7 +653,7 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) {
         solve();
     }

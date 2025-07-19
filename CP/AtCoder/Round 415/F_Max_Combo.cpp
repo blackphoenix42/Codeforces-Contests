@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 17:39:54
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: AtCoder - Japan Registry Services (JPRS) Programming Contest 2025#2
+ *(AtCoder Beginner Contest 415) Problem Name: F - Max Combo Problem URL:
+ *https://atcoder.jp/contests/abc415/tasks/abc415_f Time Limit: 4000 ms Memory
+ *Limit: 1024 MB
  **/
 
 #include <bits/stdc++.h>
@@ -87,8 +86,6 @@ using u128 = __uint128_t;
 #define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
-#define rep(i, a, b) for (int i = (a); i < (b); ++i)
-#define per(i, a, b) for (int i = (b) - 1; i >= (a); --i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -128,13 +125,12 @@ using u128 = __uint128_t;
 #define write_pair(p) cout << p.first << " " << p.second << '\n'
 
 // For TESTING
-#ifndef ONLINE_JUDGE
 inline void OPEN(string s) {
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
-}
 #endif
-
+}
 // Debugging
 #ifdef LOCAL
 #define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", debug_out(__VA_ARGS__)
@@ -519,98 +515,96 @@ template <typename K>
 using safe_uset = unordered_set<K, CustomHash>;
 
 namespace CPUtils {
+struct Node {
+    char lc, rc;
+    int len, pref, suff, best;
+    Node() : lc(0), rc(0), len(0), pref(0), suff(0), best(0) {}
+    Node(char c) : lc(c), rc(c), len(1), pref(1), suff(1), best(1) {}
+};
+Node merge(const Node &a, const Node &b) {
+    if (a.len == 0) return b;
+    if (b.len == 0) return a;
+    Node c;
+    c.len = a.len + b.len;
+    c.lc = a.lc;
+    c.rc = b.rc;
+    c.pref = a.pref + (a.pref == a.len && a.rc == b.lc ? b.pref : 0);
+    c.suff = b.suff + (b.suff == b.len && a.rc == b.lc ? a.suff : 0);
+    c.best = max({a.best, b.best, (a.rc == b.lc ? a.suff + b.pref : 0)});
+    return c;
+}
 struct SegmentTree {
     int n;
-    vector<ll> tree;
+    vector<Node> tree;
 
-    SegmentTree(int _n) : n(_n), tree(4 * _n, 0) {}
+    SegmentTree(string &s) {
+        n = (int)s.size();
+        tree.resize(4 * n);
+        build(1, 0, n - 1, s);
+    }
 
-    void build(const vector<ll> &a, int v = 1, int tl = 0, int tr = -1) {
-        if (tr == -1) tr = n - 1;
+    void build(int v, int tl, int tr, const string &s) {
         if (tl == tr) {
-            tree[v] = a[tl];
+            tree[v] = Node(s[tl]);
         } else {
             int tm = (tl + tr) / 2;
-            build(a, v * 2, tl, tm);
-            build(a, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+            build(2 * v, tl, tm, s);
+            build(2 * v + 1, tm + 1, tr, s);
+            tree[v] = merge(tree[2 * v], tree[2 * v + 1]);
         }
     }
 
-    void update(int pos, ll val, int v = 1, int tl = 0, int tr = -1) {
+    void update(int pos, char val, int v = 1, int tl = 0, int tr = -1) {
         if (tr == -1) tr = n - 1;
         if (tl == tr) {
-            tree[v] = val;
+            tree[v] = Node(val);
         } else {
             int tm = (tl + tr) / 2;
             if (pos <= tm)
-                update(pos, val, v * 2, tl, tm);
+                update(pos, val, 2 * v, tl, tm);
             else
-                update(pos, val, v * 2 + 1, tm + 1, tr);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+                update(pos, val, 2 * v + 1, tm + 1, tr);
+            tree[v] = merge(tree[2 * v], tree[2 * v + 1]);
         }
     }
 
-    ll query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
+    Node query(int l, int r, int v = 1, int tl = 0, int tr = -1) {
         if (tr == -1) tr = n - 1;
-        if (l > r) return 0;
+        if (l > r) return Node();
         if (l == tl && r == tr) return tree[v];
         int tm = (tl + tr) / 2;
-        return query(l, min(r, tm), v * 2, tl, tm) +
-               query(max(l, tm + 1), r, v * 2 + 1, tm + 1, tr);
+        return merge(query(l, min(r, tm), 2 * v, tl, tm),
+                     query(max(l, tm + 1), r, 2 * v + 1, tm + 1, tr));
     }
 
     ~SegmentTree() = default;
 };
-struct FenwickTree {
-    int n;
-    vector<ll> bit;
-
-    FenwickTree(int _n) : n(_n + 1), bit(n, 0) {}
-
-    void add(int index, ll delta) {
-        for (; index < n; index += index & -index) bit[index] += delta;
-    }
-
-    ll sum(int index) const {
-        ll res = 0;
-        for (; index > 0; index -= index & -index) res += bit[index];
-        return res;
-    }
-
-    ll range_sum(int l, int r) const { return sum(r) - sum(l - 1); }
-
-    void clear() { fill(bit.begin(), bit.end(), 0); }
-
-    ~FenwickTree() = default;
-};
-struct DSU {
-    vector<int> parent, rank;
-
-    DSU(int n) : parent(n), rank(n, 0) {
-        iota(parent.begin(), parent.end(), 0);  // self-parented
-    }
-
-    int find(int x) {
-        if (x != parent[x]) parent[x] = find(parent[x]);  // path compression
-        return parent[x];
-    }
-
-    bool unite(int x, int y) {
-        x = find(x);
-        y = find(y);
-        if (x == y) return false;
-        if (rank[x] < rank[y]) swap(x, y);
-        parent[y] = x;
-        if (rank[x] == rank[y]) rank[x]++;
-        return true;
-    }
-
-    ~DSU() = default;
-};
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    string s;
+    cin >> s;
+
+    CPUtils::SegmentTree seg(s);
+
+    while (q--) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int i;
+            char x;
+            cin >> i >> x;
+            seg.update(i - 1, x);
+        } else {
+            int l, r;
+            cin >> l >> r;
+            auto res = seg.query(l - 1, r - 1);
+            print(res.best);
+        }
+    }
+}
 
 int main() {
     fastio();
@@ -619,7 +613,6 @@ int main() {
 #endif
 
     int t = 1;
-    cin >> t;
     while (t--) {
         solve();
     }

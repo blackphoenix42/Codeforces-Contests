@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 17:36:29
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: AtCoder - Japan Registry Services (JPRS) Programming Contest 2025#2
+ *(AtCoder Beginner Contest 415) Problem Name: C - Mixture Problem URL:
+ *https://atcoder.jp/contests/abc415/tasks/abc415_c Time Limit: 2000 ms Memory
+ *Limit: 1024 MB
  **/
 
 #include <bits/stdc++.h>
@@ -87,8 +86,6 @@ using u128 = __uint128_t;
 #define FOREQ(a, b, c) for (int a = b; a <= c; a += b)
 #define EACH(a, b) for (auto &a : b)
 #define REP(i, n) FOR(i, 0, n)
-#define rep(i, a, b) for (int i = (a); i < (b); ++i)
-#define per(i, a, b) for (int i = (b) - 1; i >= (a); --i)
 #define REPN(i, n) FORN(i, 1, n)
 #define CP_MAX(a, b) a = max(a, b)
 #define CP_MIN(a, b) a = min(a, b)
@@ -128,13 +125,12 @@ using u128 = __uint128_t;
 #define write_pair(p) cout << p.first << " " << p.second << '\n'
 
 // For TESTING
-#ifndef ONLINE_JUDGE
 inline void OPEN(string s) {
+#ifndef ONLINE_JUDGE
     freopen((s + ".in").c_str(), "r", stdin);
     freopen((s + ".out").c_str(), "w", stdout);
-}
 #endif
-
+}
 // Debugging
 #ifdef LOCAL
 #define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", debug_out(__VA_ARGS__)
@@ -610,7 +606,44 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int N;
+    string S;
+    cin >> N >> S;
+
+    int M = 1 << N;
+    vector<char> safe(M, 0), vis(M, 0);
+    safe[0] = 1;
+    for (int mask = 1; mask < M; mask++) {
+        safe[mask] = (S[mask - 1] == '0');
+    }
+
+    queue<int> q;
+    q.push(0);
+    vis[0] = 1;
+    int full = M - 1;
+    bool ok = false;
+
+    while (!q.empty()) {
+        int m = q.front();
+        q.pop();
+        if (m == full) {
+            ok = true;
+            break;
+        }
+        for (int i = 0; i < N; i++) {
+            if (!(m & (1 << i))) {
+                int nxt = m | (1 << i);
+                if (!vis[nxt] && safe[nxt]) {
+                    vis[nxt] = 1;
+                    q.push(nxt);
+                }
+            }
+        }
+    }
+
+    cout << (ok ? "Yes\n" : "No\n");
+}
 
 int main() {
     fastio();
