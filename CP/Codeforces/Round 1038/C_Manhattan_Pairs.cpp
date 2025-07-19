@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 20:12:01
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Order Capital Round 1 (Codeforces Round 1038, Div. 1 +
+ *Div. 2) Problem Name: C. Manhattan Pairs Problem URL:
+ *https://codeforces.com/contest/2122/problem/C Time Limit: 2000 ms Memory
+ *Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -33,7 +32,6 @@ using pll = pair<ll, ll>;
 using vs = vector<string>;
 using vvs = vector<vector<string>>;
 using vc = vector<char>;
-using vb = vector<bool>;
 using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
@@ -610,8 +608,82 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+struct Node {
+    int id;
+    ll dx, dy;
+};
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    // vector<pair<ll, ll>> pts(n), pts1(n);
+    // ll sumx = 0, sumy = 0;
+    // for (int i = 0; i < n; i++) {
+    //     cin >> pts[i].first >> pts[i].second;
+    //     sumx += pts[i].first;
+    //     sumy += pts[i].second;
+    // }
+
+    // vector<Node> A(n);
+    // for (int i = 0; i < n; i++) {
+    //     A[i].id = i + 1;
+    //     A[i].dx = pts[i].first * n - sumx;
+    //     A[i].dy = pts[i].second * n - sumy;
+    // }
+
+    // sort(A.begin(), A.end(), [&](auto &U, auto &V) {
+    //     bool hu = (U.dy > 0) || (U.dy == 0 && U.dx > 0);
+    //     bool hv = (V.dy > 0) || (V.dy == 0 && V.dx > 0);
+    //     if (hu != hv) return hu > hv;
+    //     __int128 cross = (__int128)U.dx * V.dy - (__int128)V.dx * U.dy;
+    //     if (cross != 0) return cross > 0;
+    //     __int128 du = (__int128)U.dx * U.dx + (__int128)U.dy * U.dy;
+    //     __int128 dv = (__int128)V.dx * V.dx + (__int128)V.dy * V.dy;
+    //     return du < dv;
+    // });
+
+    // for (int i = 0; i < n / 2; i++) {
+    //     cout << A[i].id << " " << A[i + n / 2].id << "\n";
+    // }
+
+    vpii px(n), py(n);
+    REP(i, n) {
+        int x, y;
+        cin >> x >> y;
+        px[i] = {x, i};
+        py[i] = {y, i};
+    }
+
+    SORT(px);
+    SORT(py);
+
+    int half = n / 2;
+    vector<bool> leftX(n, false), leftY(n, false);
+
+    REP(i, half) {
+        leftX[px[i].se] = true;
+        leftY[py[i].se] = true;
+    }
+
+    vi grpA, grpB, grpC, grpD;
+    grpA.reserve(half), grpB.reserve(half);
+    grpC.reserve(half), grpD.reserve(half);
+
+    REP(i, n) {
+        bool lx = leftX[i], ly = leftY[i];
+        if (lx && ly)
+            grpA.pb(i);
+        else if (lx)
+            grpB.pb(i);
+        else if (ly)
+            grpC.pb(i);
+        else
+            grpD.pb(i);
+    }
+
+    REP(i, sz(grpB)) { cout << grpB[i] + 1 << " " << grpC[i] + 1 << nl; }
+    REP(i, sz(grpA)) { cout << grpA[i] + 1 << " " << grpD[i] + 1 << nl; }
+}
 
 int main() {
     fastio();

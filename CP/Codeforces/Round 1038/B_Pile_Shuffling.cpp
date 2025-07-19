@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 20:09:14
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Order Capital Round 1 (Codeforces Round 1038, Div. 1 +
+ *Div. 2) Problem Name: B. Pile Shuffling Problem URL:
+ *https://codeforces.com/contest/2122/problem/B Time Limit: 1000 ms Memory
+ *Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -33,7 +32,6 @@ using pll = pair<ll, ll>;
 using vs = vector<string>;
 using vvs = vector<vector<string>>;
 using vc = vector<char>;
-using vb = vector<bool>;
 using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
@@ -611,7 +609,23 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    ll zero = 0;
+    ll one = 0;
+    ll bar = 0;
+    for (int i = 0; i < n; i++) {
+        ll a, b, c, d;
+        cin >> a >> b >> c >> d;
+        if (a > c) zero += (a - c);
+        if (b > d) {
+            one += (b - d);
+            bar += min(a, c);
+        }
+    }
+    cout << (zero + one + bar) << "\n";
+}
 
 int main() {
     fastio();

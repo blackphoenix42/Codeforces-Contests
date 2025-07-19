@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 20:31:34
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Order Capital Round 1 (Codeforces Round 1038, Div. 1 +  Div. 2) 
+*     Problem Name: D. Traffic Lights 
+*     Problem URL: https://codeforces.com/contest/2122/problem/D 
+*    Time Limit: 2000 ms 
+*    Memory Limit: 256 MB 
  **/
 
 #include <bits/stdc++.h>
@@ -33,7 +33,6 @@ using pll = pair<ll, ll>;
 using vs = vector<string>;
 using vvs = vector<vector<string>>;
 using vc = vector<char>;
-using vb = vector<bool>;
 using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
@@ -320,7 +319,7 @@ const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
 const ll INF = 1e18;
-const ll INF_INT = 1e9;
+const int INF_INT = 1e9;
 const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
 const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
@@ -611,7 +610,89 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vvi adj(n + 1);
+    REP(i, m) {
+        int u, v;
+        read_pair(u, v);
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    vi deg(n + 1), offset(n + 2);
+    int total = 0;
+    FORN(u, 1, n) {
+        deg[u] = sz(adj[u]);
+        offset[u] = total;
+        total += deg[u];
+    }
+
+    vi vertex(total), residue(total);
+    FORN(u, 1, n) {
+        REP(i, deg[u]) {
+            int id = offset[u] + i;
+            vertex[id] = u;
+            residue[id] = i;
+        }
+    }
+
+    vi dist(total, INF_INT), wait(total, INF_INT);
+    deque<int> dq;
+
+    int start = offset[1];
+    dist[start] = wait[start] = 0;
+    dq.pb(start);
+
+    int bestDist = INF_INT, bestWait = INF_INT;
+
+    while (!dq.empty()) {
+        int id = dq.front();
+        dq.pop_front();
+
+        int d = dist[id];
+        if (d > bestDist) break;
+
+        int w = wait[id];
+        int u = vertex[id], r = residue[id];
+
+        if (u == n) {
+            if (d < bestDist) {
+                bestDist = d;
+                bestWait = w;
+            } else if (d == bestDist && w < bestWait) {
+                bestWait = w;
+            }
+            continue;
+        }
+
+        int degU = deg[u];
+        int next_r = (r + 1) % degU;
+        int id_rotate = offset[u] + next_r;
+
+        if (dist[id_rotate] > d + 1 ||
+            (dist[id_rotate] == d + 1 && wait[id_rotate] > w + 1)) {
+            dist[id_rotate] = d + 1;
+            wait[id_rotate] = w + 1;
+            dq.pb(id_rotate);
+        }
+
+        int v = adj[u][r];
+        int r_v = (d + 1) % deg[v];
+        int id_jump = offset[v] + r_v;
+
+        if (dist[id_jump] > d + 1 ||
+            (dist[id_jump] == d + 1 && wait[id_jump] > w)) {
+            dist[id_jump] = d + 1;
+            wait[id_jump] = w;
+            dq.pb(id_jump);
+        }
+    }
+
+    cout << bestDist << " " << bestWait << nl;
+}
 
 int main() {
     fastio();

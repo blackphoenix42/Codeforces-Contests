@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 20:12:01
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Order Capital Round 1 (Codeforces Round 1038, Div. 1 +
+ *Div. 2) Problem Name: G. Tree Parking Problem URL:
+ *https://codeforces.com/contest/2122/problem/G Time Limit: 2000 ms Memory
+ *Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -307,11 +306,11 @@ void debug_out(Head H, Tail... T) {
     if (sizeof...(T)) cerr << ", ";
     debug_out(T...);
 }
-
+const int MX = 400010;
 // Constants
-#define USE_MOD1 1
+#define USE_MOD1 0
 #if USE_MOD1
-const int MOD = 1e9 + 7;
+const int MOD = 998244353;
 #else
 const int MOD = 998244353;
 #endif
@@ -332,7 +331,7 @@ ll mod_sub(ll a, ll b) { return ((a - b) % MOD + MOD) % MOD; }
 ll mod_mul(ll a, ll b) { return (a * b) % MOD; }
 ll mod_pow(ll a, ll b) {
     ll res = 1;
-    a %= MOD;
+    // a %= MOD;
     while (b > 0) {
         if (b & 1) res = mod_mul(res, a);
         a = mod_mul(a, a);
@@ -420,9 +419,12 @@ ll mod_inv_general(ll a, ll m) {
 // nCr % MOD using Fermat's Little Theorem (MOD must be prime)
 const int MAXN = 2e5 + 5;
 #ifndef ONLINE_JUDGE
-ll fact[MAXN], inv_fact[MAXN];
+// ll fact[MAXN], inv_fact[MAXN];
+ll fact[MX], inv_fact[MX], p2[MX], ip2[MX];
+
 #else
-static ll fact[MAXN], inv_fact[MAXN];
+// static ll fact[MAXN], inv_fact[MAXN];
+static ll fact[MX], inv_fact[MX], p2[MX], ip2[MX];
 #endif
 
 void precompute_factorials(int n) {
@@ -610,11 +612,56 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+void precompute() {
+    fact[0] = inv_fact[0] = 1;
+    FOR(i, 1, MX) fact[i] = fact[i - 1] * i % MOD;
+    inv_fact[MX - 1] = mod_pow(fact[MX - 1], MOD - 2);
+    for (int i = MX - 2; i >= 1; --i)
+        inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
 
-void solve() {}
+    p2[0] = ip2[0] = 1;
+    ll inv2 = mod_inv(2);
+    FOR(i, 1, MX) {
+        p2[i] = p2[i - 1] * 2 % MOD;
+        ip2[i] = ip2[i - 1] * inv2 % MOD;
+    }
+}
+ll C(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n] * inv_fact[k] % MOD * inv_fact[n - k] % MOD;
+}
+ll euler_poly(int n, int m) {
+    ll result = 0;
+    REP(j, m + 1) {
+        ll term = C(n + 1, j) * mod_pow(m + 1 - j, n) % MOD;
+        if (j & 1)
+            result = (result - term + MOD) % MOD;
+        else
+            result = (result + term) % MOD;
+    }
+    return result;
+}
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    if (k == 0 || k >= n) {
+        cout << 0 << nl;
+        return;
+    }
+
+    int N = n - 1, m = k - 1;
+    ll A = euler_poly(N, m);
+
+    ll res = fact[2 * n] * ip2[n] % MOD;
+    res = res * A % MOD;
+    res = res * mod_inv(n) % MOD;
+
+    cout << res << nl;
+}
 
 int main() {
     fastio();
+    precompute();
 #ifdef LOCALCLK
     clock_t start = clock();
 #endif

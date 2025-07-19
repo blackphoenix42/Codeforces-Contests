@@ -1,13 +1,12 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 20:05:24
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Order Capital Round 1 (Codeforces Round 1038, Div. 1 +
+ *Div. 2) Problem Name: A. Greedy Grid Problem URL:
+ *https://codeforces.com/contest/2122/problem/0 Time Limit: 1000 ms Memory
+ *Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -33,7 +32,6 @@ using pll = pair<ll, ll>;
 using vs = vector<string>;
 using vvs = vector<vector<string>>;
 using vc = vector<char>;
-using vb = vector<bool>;
 using vvc = vector<vector<char>>;
 using vl = vector<ll>;
 using vvl = vector<vl>;
@@ -611,7 +609,14 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    if (n == 1 || m == 1 || (n == 2 && m == 2))
+        cout << "NO\n";
+    else
+        cout << "YES\n";
+}
 
 int main() {
     fastio();
