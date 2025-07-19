@@ -1,13 +1,13 @@
 /**
  *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-07-19 13:48:34
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Group: Codeforces - Codeforces Round 887 (Div. 2)
+ *    Problem Name: A. Desorting
+ *    Problem URL: https://codeforces.com/problemset/problem/1853/A
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -110,8 +110,7 @@ using u128 = __uint128_t;
 #define clz(x) __builtin_clzll(x)
 #define ctz(x) __builtin_ctzll(x)
 #define ffs(x) __builtin_ffsll(x)
-#define readvec(vec) \
-    for (auto &x : vec) cin >> x;
+
 #define READVEC(vec) \
     for (auto &x : vec) cin >> x;
 #define READARR(arr, n) \
@@ -607,7 +606,28 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vi arr(n);
+    READVEC(arr);
+    if ((!is_sorted(all(arr))) or n == 1) {
+        print(0);
+        return;
+    }
+
+    int minEL = INT_MAX;
+    FOR(i, 1, n) {
+        if (arr[i] == arr[i - 1]) {
+            print(1);
+            return;
+        }
+        int gap = arr[i] - arr[i - 1] + 1;
+        int ops = (gap + 1) / 2;
+        minEL = min(minEL, ops);
+    }
+    print(minEL);
+}
 
 int main() {
     fastio();
