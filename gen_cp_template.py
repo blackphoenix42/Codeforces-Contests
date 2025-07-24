@@ -103,24 +103,32 @@ def update_metadata_block(cpp_file):
             original_lines = f.read().splitlines()
 
         updated_lines = []
-        in_comment = False
-        header_updated = False
+        in_comment_block = False
+        header_replaced = False
 
-        for line in original_lines:
-            if not header_updated:
-                if line.strip().startswith("/*"):
-                    in_comment = True
-                    updated_lines.extend(new_header)
-                    header_updated = True
-                if in_comment and line.strip().endswith("*/"):
-                    in_comment = False
-                continue
-            updated_lines.append(line)
+        i = 0
+        n = len(original_lines)
+
+        # Skip existing header comment block if present
+        if i < n and original_lines[i].strip().startswith("/*"):
+            in_comment_block = True
+            while i < n:
+                if original_lines[i].strip().endswith("*/"):
+                    i += 1
+                    break
+                i += 1
+
+        # Insert new header
+        updated_lines.extend(new_header)
+        updated_lines.append("")  # spacing
+
+        # Add the rest of the original content
+        updated_lines.extend(original_lines[i:])
 
         with open(cpp_file, 'w', encoding='utf-8') as f:
             f.write("\n".join(updated_lines) + "\n")
 
-        log(f"Updated metadata block in: {cpp_file}", "SUCCESS")
+        log(f"Metadata header updated in: {cpp_file}", "SUCCESS")
 
     except Exception as e:
         log(f"Error updating metadata in {cpp_file}: {e}", "ERROR")
