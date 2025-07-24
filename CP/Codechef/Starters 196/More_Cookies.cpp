@@ -1,11 +1,10 @@
 /**
- *    Name:    Ayush Yadav
  *    Author: BinaryPhoenix10
- *    Created: 2025-07-23 19:55:36
+ *    Created: 2025-07-23 21:17:43
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Group: Codeforces - Codeforces Round 879 (Div. 2)
- *    Problem Name: A. Unit Array
- *    Problem URL: https://codeforces.com/problemset/problem/1834/A
+ *    Group: CodeChef - START196A
+ *    Problem Name: More Cookies
+ *    Problem URL: https://www.codechef.com/START196A/problems/MORECOOK
  *    Time Limit: 1000 ms
  *    Memory Limit: 256 MB
  **/
@@ -612,22 +611,24 @@ struct DSU {
 }  // namespace CPUtils
 
 void solve() {
-    int n;
-    cin >> n;
-    vi arr(n);
-    readvec(arr);
-    int cnt = 0;
-    FOR(i, 0, n) {
-        if (arr[i] == -1) cnt++;
+    ll n, c;
+    cin >> n >> c;
+    vl arr(n);
+    ll mn = LLONG_MAX;
+    uset1<ll> s;
+    for (ll &x : arr) {
+        cin >> x;
+        mn = min(mn, x);
+        s.insert(x);
     }
-    if (cnt % 2 == 0) {
-        print(0);
-    } else if (cnt == n) {
-        print(n);
-    } else if (cnt > (n - cnt)) {
-    } else {
-        print(1);
+
+    ll ans = 0;
+    if (!(c > mn && !s.count(c))) {
+        ll x = max(c, mn + 1);
+        while (s.count(x)) ++x;
+        ans = x - c;
     }
+    print(ans);
 }
 
 int main() {
