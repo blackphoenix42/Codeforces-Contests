@@ -2,8 +2,9 @@ import time
 import os
 import datetime
 import json
-import glob
 import traceback
+import sys
+from typing import Optional
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -75,7 +76,7 @@ def load_template(metadata):
             lines = f.read().splitlines()
     except Exception as e:
         log(f"Failed to read template file: {TEMPLATE_FILE}. Error: {e}", "ERROR")
-        return ""
+        return []
 
     for i, line in enumerate(lines):
         if "*    Created:" in line:
@@ -90,7 +91,48 @@ def load_template(metadata):
             lines[i] = f" *    Time Limit: {metadata['Time Limit']}"
         elif "*    Memory Limit:" in line:
             lines[i] = f" *    Memory Limit: {metadata['Memory Limit']}"
-    return "\n".join(lines)
+    return lines
+
+# ---------------- Header Updater ---------------- #
+def update_metadata_block(cpp_file):
+    metadata = extract_cph_metadata(cpp_file)
+    new_header = load_template(metadata)
+
+    try:
+        with open(cpp_file, 'r', encoding='utf-8') as f:
+            original_lines = f.read().splitlines()
+
+        updated_lines = []
+        in_comment = False
+        header_updated = False
+
+        for line in original_lines:
+            if not header_updated:
+                if line.strip().startswith("/*"):
+                    in_comment = True
+                    updated_lines.extend(new_header)
+                    header_updated = True
+                if in_comment and line.strip().endswith("*/"):
+                    in_comment = False
+                continue
+            updated_lines.append(line)
+
+        with open(cpp_file, 'w', encoding='utf-8') as f:
+            f.write("\n".join(updated_lines) + "\n")
+
+        log(f"Updated metadata block in: {cpp_file}", "SUCCESS")
+
+    except Exception as e:
+        log(f"Error updating metadata in {cpp_file}: {e}", "ERROR")
+        traceback.print_exc()
+
+# ---------------- CLI Auto-Fallback ---------------- #
+def get_latest_cpp_file() -> Optional[str]:
+    cpp_files = [f for f in os.listdir(".") if f.endswith(".cpp")]
+    if not cpp_files:
+        return None
+    cpp_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+    return cpp_files[0]
 
 # ---------------- Watchdog Handler ---------------- #
 class CPHHandler(FileSystemEventHandler):
@@ -98,37 +140,40 @@ class CPHHandler(FileSystemEventHandler):
         if not event.is_directory and event.src_path.endswith(".cpp"):
             log(f"Detected new C++ file: {event.src_path}", "INFO")
             time.sleep(1.0)
-
-            metadata = extract_cph_metadata(event.src_path)
-            try:
-                template_content = load_template(metadata)
-                if not template_content.strip():
-                    log(f"Template content empty. Skipping injection for {event.src_path}", "WARNING")
-                    return
-
-                with open(event.src_path, 'w', encoding='utf-8') as f:
-                    f.write(template_content)
-
-                log(f"Injected template with metadata into: {event.src_path}", "SUCCESS")
-            except Exception as e:
-                log(f"Error writing to {event.src_path}: {e}", "ERROR")
-                traceback.print_exc()
+            update_metadata_block(event.src_path)
 
 # ---------------- Main Entry ---------------- #
 if __name__ == "__main__":
-    observer = Observer()
-    observer.schedule(CPHHandler(), WATCH_FOLDER, recursive=False)
-    observer.start()
-    log(f"Watching folder: {os.path.abspath(WATCH_FOLDER)}", "INFO")
+    if len(sys.argv) == 2:
+        # Manual override: CLI mode
+        target_file = sys.argv[1]
+        if not os.path.isfile(target_file):
+            log(f"File not found: {target_file}", "ERROR")
+            sys.exit(1)
+        update_metadata_block(target_file)
+    elif len(sys.argv) == 1:
+        # No argument: auto mode + watchdog
+        target_file = get_latest_cpp_file()
+        if target_file:
+            log(f"No file provided. Auto-updating latest C++ file: {target_file}", "INFO")
+            update_metadata_block(target_file)
 
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-        log("Interrupted. Stopping observer...", "INFO")
-    observer.join()
-    log("Observer stopped. Exiting.", "INFO")
+        observer = Observer()
+        observer.schedule(CPHHandler(), WATCH_FOLDER, recursive=False)
+        observer.start()
+        log(f"Watching folder: {os.path.abspath(WATCH_FOLDER)}", "INFO")
+
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+            log("Interrupted. Stopping observer...", "INFO")
+        observer.join()
+        log("Observer stopped. Exiting.", "INFO")
+    else:
+        log("Usage: python gen_cp_template.py [optional_cpp_file]", "ERROR")
 
 
 # python gen_cp_template.py
+# python gen_cp_template.py [optional_cpp_file]
