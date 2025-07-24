@@ -5,7 +5,7 @@
     "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
     "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "zig": "zig run",
-    "cpp": "cd $dir && g++ -std=c++23 -Wextra -Wall -Wconversion -Wshadow -Wformat=2 -Wfloat-equal -Wlogical-op -Wshift-overflow=2 -Wduplicated-cond -Wcast-qual -Wcast-align -Wfatal-errors -D_GLIBCXX_DEBUG -O2 -DLOCAL -DLOCALCLK -Wl,--stack=268435456 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+    "cpp": "cd $dir && g++ -std=c++23 -Wextra -Wall -Wconversion -Wshadow -Wformat=2 -Wfloat-equal -Wlogical-op -Wshift-overflow=2 -Wduplicated-cond -Wcast-qual -Wcast-align -Wfatal-errors -Wno-sign-conversion -Wno-unused-result -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2 -pedantic -D_FORTIFY_SOURCE=2  -fstack-protector-all -DLOCAL -DLOCALCLK -Wl,--stack=268435456 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     "php": "php",
     "python": "python -u",
