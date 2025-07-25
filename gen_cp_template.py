@@ -78,20 +78,33 @@ def load_template(metadata):
         log(f"Failed to read template file: {TEMPLATE_FILE}. Error: {e}", "ERROR")
         return []
 
-    for i, line in enumerate(lines):
+    comment_block = []
+    in_comment = False
+
+    for line in lines:
+        if line.strip().startswith("/*"):
+            in_comment = True
+        if in_comment:
+            comment_block.append(line)
+        if line.strip().endswith("*/"):
+            break
+
+    # Now update fields in the comment block
+    for i, line in enumerate(comment_block):
         if "*    Created:" in line:
-            lines[i] = f" *    Created: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            comment_block[i] = f" *    Created: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         elif "*    Group:" in line:
-            lines[i] = f" *    Group: {metadata['Group']}"
+            comment_block[i] = f" *    Group: {metadata['Group']}"
         elif "*    Problem Name:" in line:
-            lines[i] = f" *    Problem Name: {metadata['Problem Name']}"
+            comment_block[i] = f" *    Problem Name: {metadata['Problem Name']}"
         elif "*    Problem URL:" in line:
-            lines[i] = f" *    Problem URL: {metadata['Problem URL']}"
+            comment_block[i] = f" *    Problem URL: {metadata['Problem URL']}"
         elif "*    Time Limit:" in line:
-            lines[i] = f" *    Time Limit: {metadata['Time Limit']}"
+            comment_block[i] = f" *    Time Limit: {metadata['Time Limit']}"
         elif "*    Memory Limit:" in line:
-            lines[i] = f" *    Memory Limit: {metadata['Memory Limit']}"
-    return lines
+            comment_block[i] = f" *    Memory Limit: {metadata['Memory Limit']}"
+    return comment_block
+
 
 # ---------------- Header Updater ---------------- #
 def update_metadata_block(cpp_file):
