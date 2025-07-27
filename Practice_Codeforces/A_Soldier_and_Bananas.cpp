@@ -1,6 +1,6 @@
 /**
  *    Author: BinaryPhoenix10
- *    Created: 2025-07-27 13:37:38
+ *    Created: 2025-07-27 13:45:25
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
  *    Group: Codeforces - Codeforces Round 304 (Div. 2)
  *    Problem Name: A. Soldier and Bananas
@@ -613,14 +613,10 @@ struct DSU {
 void solve() {
     int k, n, w;
     cin >> k >> n >> w;
-    int sum = 0;
-    for (int i = 1; i <= w; i++) {
-        sum += i * k;
-    }
-    if (sum <= n)
-        print(0);
-    else
-        print(sum - n);
+    long long sum = k * w * (w + 1) / 2;
+    long long borrow = sum - n;
+    if (borrow < 0) borrow = 0;
+    print(borrow);
 }
 
 int main() {
