@@ -133,7 +133,7 @@ def update_metadata_block(cpp_file):
 
         # Insert new header
         updated_lines.extend(new_header)
-        updated_lines.append("")  # spacing
+        # updated_lines.append("")  # spacing
 
         # Add the rest of the original content
         updated_lines.extend(original_lines[i:])
