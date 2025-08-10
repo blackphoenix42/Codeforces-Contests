@@ -2,6 +2,7 @@
  *    Author: BinaryPhoenix10
  *    Created:
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
+ *    Quote:
  *    Group:
  *    Problem Name:
  *    Problem URL:
@@ -320,9 +321,9 @@ const double PI = acos(-1);
 const double EPS = 1e-9;
 const ll INF = 1e18;
 const ll INF_INT = 1e9;
-const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-const int dirx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
-const int diry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
+const int dirr[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+const int dirrx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
+const int dirry[8] = {0, 1, -1, 0, -1, 1, -1, 1};
 #define in_bounds(x, y, n, m) (x >= 0 && x < n && y >= 0 && y < m)
 
 // Modular arithmetic utils (optional)
@@ -419,22 +420,22 @@ ll mod_inv_general(ll a, ll m) {
 // nCr % MOD using Fermat's Little Theorem (MOD must be prime)
 const int MAXN = 2e5 + 5;
 #ifndef ONLINE_JUDGE
-ll fact[MAXN], inv_fact[MAXN];
+ll fact1[MAXN], inv_fact1[MAXN];
 #else
-static ll fact[MAXN], inv_fact[MAXN];
+static ll fact1[MAXN], inv_fact1[MAXN];
 #endif
 
 void precompute_factorials(int n) {
-    fact[0] = inv_fact[0] = 1;
-    for (int i = 1; i <= n; ++i) fact[i] = mod_mul(fact[i - 1], i);
-    inv_fact[n] = mod_inv(fact[n]);
+    fact1[0] = inv_fact1[0] = 1;
+    for (int i = 1; i <= n; ++i) fact1[i] = mod_mul(fact1[i - 1], i);
+    inv_fact1[n] = mod_inv(fact1[n]);
     for (int i = n - 1; i >= 1; --i)
-        inv_fact[i] = mod_mul(inv_fact[i + 1], i + 1);
+        inv_fact1[i] = mod_mul(inv_fact1[i + 1], i + 1);
 }
 
 ll nCr(int n, int r) {
     if (r < 0 || r > n) return 0;
-    return mod_mul(fact[n], mod_mul(inv_fact[r], inv_fact[n - r]));
+    return mod_mul(fact1[n], mod_mul(inv_fact1[r], inv_fact1[n - r]));
 }
 
 // Sieve of Eratosthenes (0-based)
