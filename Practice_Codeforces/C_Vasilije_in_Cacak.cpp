@@ -1,13 +1,13 @@
 /**
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-08-11T00:38:11+05:30
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Keep it logically awesome.
+ *    Group: Codeforces - Codeforces Round 900 (Div. 3)
+ *    Problem Name: C. Vasilije in Cacak
+ *    Problem URL: https://codeforces.com/problemset/problem/1878/C
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,13 +611,20 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll n, k, x;
+    cin >> n >> k >> x;
+    ll mn = k * (k + 1) / 2;
+    ll mx = k * (2 * n - k + 1) / 2;
+    cout << (mn <= x && x <= mx ? "YES" : "NO") << '\n';
+}
 
 int main(int argc, char **argv) {
     fastio();
 #ifdef LOCALCLK
     clock_t start = clock();
 #endif
+
 #ifndef ONLINE_JUDGE
     if (argc >= 2) freopen(argv[1], "r", stdin);
     if (argc >= 3) freopen(argv[2], "w", stdout);
