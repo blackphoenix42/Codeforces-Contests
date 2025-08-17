@@ -1,13 +1,13 @@
 /**
  *    Author: BinaryPhoenix10
- *    Created:
+ *    Created: 2025-08-17T16:26:15+05:30
  *    Profile: https://codeforces.com/profile/BinaryPhoenix10
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Non-blocking is better than blocking.
+ *    Group: Codeforces - Codeforces Round 896 (Div. 2)
+ *    Problem Name: A. Make It Zero
+ *    Problem URL: https://codeforces.com/problemset/problem/1869/A
+ *    Time Limit: 1000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,7 +611,24 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vi arr(n);
+    readvec(arr);
+
+    if (n & 1) {
+        print(4);
+        cout << 1 << " " << n - 1 << nl;
+        cout << 1 << " " << n - 1 << nl;
+        cout << n - 1 << " " << n << nl;
+        cout << n - 1 << " " << n << nl;
+    } else {
+        print(2);
+        cout << 1 << " " << n << nl;
+        cout << 1 << " " << n << nl;
+    }
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {
