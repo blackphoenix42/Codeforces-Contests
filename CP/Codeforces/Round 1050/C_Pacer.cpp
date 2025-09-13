@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T20:17:57+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Favor focus over features.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: C. Pacer
+ *    Problem URL: https://codeforces.com/contest/2148/problem/C
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,7 +611,28 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    ll m;
+    cin >> n >> m;
+    ll prev_a = 0;
+    int prev_b = 0;
+    ll ans = 0;
+
+    for (int i = 0; i < n; ++i) {
+        ll a;
+        int b;
+        cin >> a >> b;
+        ll L = a - prev_a;
+        int need = prev_b ^ b;
+        ll take = L - (((L & 1) != need) ? 1 : 0);
+        ans += take;
+        prev_a = a;
+        prev_b = b;
+    }
+    ans += (m - prev_a);
+    cout << ans << "\n";
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

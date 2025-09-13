@@ -611,7 +611,11 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    ll x, n;
+    cin >> x >> n;
+    cout << (n % 2 ? x : 0) << '\n';
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

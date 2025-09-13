@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T20:21:44+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Approachable is better than simple.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: D. Destruction of the Dandelion Fields
+ *    Problem URL: https://codeforces.com/contest/2148/problem/D
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,7 +611,33 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    ll sumEven = 0;
+    vl odd;
+    odd.reserve(n);
+
+    for (int i = 0; i < n; ++i) {
+        ll x;
+        cin >> x;
+        if ((x & 1LL) == 0)
+            sumEven += x;
+        else
+            odd.push_back(x);
+    }
+
+    if (odd.empty()) {
+        cout << 0 << '\n';
+        return;
+    }
+
+    sort(odd.begin(), odd.end(), greater<ll>());
+    int take = (int)((odd.size() + 1) / 2);
+    ll ans = sumEven;
+    for (int i = 0; i < take; ++i) ans += odd[i];
+    cout << ans << '\n';
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

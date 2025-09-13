@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T20:38:59+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Avoid administrative distraction.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: E. Split
+ *    Problem URL: https://codeforces.com/contest/2148/problem/E
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,7 +611,45 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vi a(n);
+    vi cnt(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+        ++cnt[a[i]];
+    }
+
+    bool ok = true;
+    for (int v = 1; v <= n; ++v) {
+        if (cnt[v] % k != 0) {
+            ok = false;
+            break;
+        }
+    }
+    if (!ok) {
+        cout << 0 << '\n';
+        return;
+    }
+
+    vi quota(n + 1, 0);
+    for (int v = 1; v <= n; ++v) quota[v] = cnt[v] / k;
+
+    vi freq1(n + 1, 0);
+    ll ans = 0;
+    int l = 0;
+    for (int r = 0; r < n; ++r) {
+        int v = a[r];
+        ++freq1[v];
+        while (freq1[v] > quota[v]) {
+            --freq1[a[l]];
+            ++l;
+        }
+        ans += (r - l + 1LL);
+    }
+    cout << ans << '\n';
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

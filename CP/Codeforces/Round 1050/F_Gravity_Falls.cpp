@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T20:42:20+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: It's not fully shipped until it's fast.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: F. Gravity Falls
+ *    Problem URL: https://codeforces.com/contest/2148/problem/F
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -319,7 +319,6 @@ const int MOD = 998244353;
 const ll INFF = 1000000000000000005ll;
 const double PI = acos(-1);
 const double EPS = 1e-9;
-const ll INF = 1e18;
 const ll INF_INT = 1e9;
 const int dirr[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 const int dirrx[8] = {-1, 0, 0, 1, -1, -1, 1, 1};
@@ -611,7 +610,70 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n;
+    cin >> n;
+    vi k(n);
+    vvi a(n);
+    int M = 0;
+    for (int i = 0; i < n; ++i) {
+        int ki;
+        cin >> ki;
+        k[i] = ki;
+        a[i].resize(ki);
+        for (int j = 0; j < ki; ++j) cin >> a[i][j];
+        M = max(M, ki);
+    }
+
+    const int INF = INT_MAX;
+    vi minAll(M + 1, INF);
+    vvi rowsMin(M + 1);
+    for (int i = 0; i < n; ++i) {
+        for (int p = 1; p <= k[i]; ++p) {
+            int v = a[i][p - 1];
+            if (v < minAll[p]) {
+                minAll[p] = v;
+                rowsMin[p].clear();
+                rowsMin[p].pb(i);
+            } else if (v == minAll[p]) {
+                rowsMin[p].pb(i);
+            }
+        }
+    }
+
+    vi ans(M + 1, 0);
+    vi G = rowsMin[1];
+    ans[1] = minAll[1];
+
+    for (int p = 2; p <= M; ++p) {
+        if (!G.empty()) {
+            int v = INF;
+            bool any = false;
+            for (int idx : G) {
+                if (k[idx] >= p) {
+                    any = true;
+                    v = min(v, a[idx][p - 1]);
+                }
+            }
+            if (any) {
+                ans[p] = v;
+                vi G2;
+                G2.reserve(G.size());
+                for (int idx : G) {
+                    if (k[idx] >= p && a[idx][p - 1] == v) G2.pb(idx);
+                }
+                G.swap(G2);
+                continue;
+            }
+        }
+        ans[p] = minAll[p];
+        G = rowsMin[p];
+    }
+
+    for (int p = 1; p <= M; ++p) {
+        cout << ans[p] << (p == M ? '\n' : ' ');
+    }
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T20:09:59+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Encourage flow.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: B. Lasers
+ *    Problem URL: https://codeforces.com/contest/2148/problem/B
+ *    Time Limit: 2000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -611,7 +611,20 @@ struct DSU {
 };
 }  // namespace CPUtils
 
-void solve() {}
+void solve() {
+    int n, m;
+    ll x, y;
+    cin >> n >> m >> x >> y;
+    for (int i = 0; i < n; ++i) {
+        ll a;
+        cin >> a;
+    }
+    for (int j = 0; j < m; ++j) {
+        ll b;
+        cin >> b;
+    }
+    cout << (n + m) << '\n';
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {

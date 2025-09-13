@@ -1,13 +1,13 @@
 /**
  *    Author: PhoenixIzHere
- *    Created:
+ *    Created: 2025-09-13T21:04:36+05:30
  *    Profile: https://codeforces.com/profile/PhoenixIzHere
- *    Quote:
- *    Group:
- *    Problem Name:
- *    Problem URL:
- *    Time Limit:
- *    Memory Limit:
+ *    Quote: Half measures are as bad as nothing at all.
+ *    Group: Codeforces - Codeforces Round 1050 (Div. 4)
+ *    Problem Name: G. Farmer John's Last Wish
+ *    Problem URL: https://codeforces.com/contest/2148/problem/G
+ *    Time Limit: 3000 ms
+ *    Memory Limit: 256 MB
  **/
 
 #include <bits/stdc++.h>
@@ -610,8 +610,44 @@ struct DSU {
     ~DSU() = default;
 };
 }  // namespace CPUtils
+static const int MAXN1 = 200000;
+static vvi divs_pre(MAXN1 + 1);
+vector<int> cnt(MAXN1 + 1, 0);
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> touched;
+    touched.reserve(n * 12);
+    int g = 0;
+    int best = 0;
+    for (int i = 1; i <= n; ++i) {
+        int x;
+        cin >> x;
+        const auto &dv = divs_pre[x];
+        for (int d : dv) {
+            if (cnt[d]++ == 0) touched.push_back(d);
+        }
 
-void solve() {}
+        int newg = (i == 1 ? x : std::gcd(g, x));
+
+        if (i == 1 || newg != g) {
+            g = newg;
+            best = 0;
+            for (int k = g + g; k <= n; k += g) {
+                if (cnt[k] > best) best = cnt[k];
+            }
+        } else {
+            for (int d : dv) {
+                if (d != g && d % g == 0) {
+                    if (cnt[d] > best) best = cnt[d];
+                }
+            }
+        }
+
+        cout << best << (i == n ? '\n' : ' ');
+    }
+    for (int d : touched) cnt[d] = 0;
+}
 
 #ifndef ONLINE_JUDGE
 int main(int argc, char **argv) {
@@ -626,7 +662,9 @@ int main() {
     if (argc >= 2) freopen(argv[1], "r", stdin);
     if (argc >= 3) freopen(argv[2], "w", stdout);
 #endif
-
+    for (int d = 1; d <= MAXN1; ++d) {
+        for (int m = d; m <= MAXN1; m += d) divs_pre[m].push_back(d);
+    }
     int t = 1;
     cin >> t;
     while (t--) {
